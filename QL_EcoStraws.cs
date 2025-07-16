@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 
 namespace Do_an_P10
@@ -57,6 +58,7 @@ namespace Do_an_P10
                 panelLichSuKho.Visible = false;
                 panelDonhang.Visible = false;
                 panelDaiLy.Visible = false;
+                panelThongke.Visible = false;
                 loaddata();
             }
         }
@@ -315,6 +317,7 @@ namespace Do_an_P10
                 loaddata();
             }
         }
+        #region Quản lý khách hàng
         private void kh_Click(object sender, EventArgs e)
         {
             panelKhachHang.Visible = !panelKhachHang.Visible;
@@ -325,6 +328,7 @@ namespace Do_an_P10
                 panelLichSuKho.Visible = false;
                 panelDonhang.Visible = false;
                 panelDaiLy.Visible = false;
+                panelThongke.Visible = false;
                 loadKhachHang();
             }
         }
@@ -527,7 +531,8 @@ namespace Do_an_P10
         {
 
         }
-
+        #endregion
+        #region Quản lý đơn hàng
         private void dh_Click(object sender, EventArgs e)
         {
             panelDonhang.Visible = !panelDonhang.Visible;
@@ -538,6 +543,7 @@ namespace Do_an_P10
                 panelKhachHang.Visible = false;
                 panelLichSuKho.Visible = false;
                 panelDaiLy.Visible = false;
+                panelThongke.Visible = false;
                 // Gọi hàm load đơn hàng nếu bạn có
                 loadDonHang();
             }
@@ -766,7 +772,8 @@ namespace Do_an_P10
             }
             txtDonGia.Text = "";
         }
-
+        #endregion
+        #region Quản lý kho
         private void panelLichSuKho_Paint(object sender, PaintEventArgs e)
         {
             tu.Value = DateTime.Now.AddMonths(-1); // mặc định từ 1 tháng trước
@@ -794,6 +801,7 @@ namespace Do_an_P10
                 panelKhachHang.Visible = false;
                 panelDonhang.Visible = false;
                 panelDaiLy.Visible = false;
+                panelThongke.Visible = false;
             }
         }
 
@@ -907,7 +915,8 @@ namespace Do_an_P10
             dgvGioHang.DataSource = null;
             lbTongTien.Text = "Tổng: 0 VNĐ";
         }
-
+        #endregion
+        #region Quản lý Đại lý
         private void btDaiLy_Click(object sender, EventArgs e)
         {
             panelDaiLy.Visible = !panelDaiLy.Visible;
@@ -917,7 +926,7 @@ namespace Do_an_P10
                 panelKhachHang.Visible = false;
                 panelDonhang.Visible = false;
                 panelLichSuKho.Visible = false;
-
+                panelThongke.Visible = false;
                 LoadDaiLy();
             }
         }
@@ -1147,6 +1156,8 @@ namespace Do_an_P10
             txtDlTen.Clear(); // Xóa ô tìm kiếm tên đại lý nếu có
             dgvChiTietPhieu.DataSource = null; // Xóa chi tiết phiếu
         }
+        #endregion
+        #region Quản lý Phiếu nhập & Sản phẩm nhập
         private void LoadPhieuNhap(DateTime tuNgay, DateTime denNgay, string tenDaiLy)
         {
             string query = @"
@@ -1472,5 +1483,269 @@ namespace Do_an_P10
                 cbSP.ValueMember = "MaSP";
             }
         }
+
+        #endregion
+        #region Báo cáo & Thống kê
+        private void LoadDoanhThuTheoThang()
+        {
+            DateTime tuNgay = dtpTuNgay.Value;
+            DateTime denNgay = dtpDenNgay.Value;
+            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+
+            chartTheoThang.Series.Clear();
+            chartTheoThang.Titles.Clear(); // Xóa tiêu đề cũ nếu có
+
+            chartTheoThang.Titles.Add("Doanh thu và lợi nhuận theo tháng");
+            chartTheoThang.Titles[0].Font = new Font("Time new roman", 10, FontStyle.Bold);
+
+            chartTheoThang.Series.Add("Doanh thu");
+            chartTheoThang.Series.Add("Lợi nhuận");
+
+            foreach (DataRow row in dt.Rows)
+            {
+                DateTime ngay = Convert.ToDateTime(row["NgayLap"]);
+                decimal doanhThu = Convert.ToDecimal(row["DoanhThu"]);
+                decimal loiNhuan = Convert.ToDecimal(row["LoiNhuan"]);
+                chartTheoThang.Series["Doanh thu"].Points.AddXY(ngay.ToString("MMM"), doanhThu);
+                chartTheoThang.Series["Lợi nhuận"].Points.AddXY(ngay.ToString("MMM"), loiNhuan);
+            }
         }
+
+
+        private void LoadDoanhThuTheoNgay()
+        {
+            DateTime tuNgay = dtpTuNgay.Value;
+            DateTime denNgay = dtpDenNgay.Value;
+
+            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+
+            chartTheoNgay.Series.Clear();
+            chartTheoNgay.Titles.Clear();
+
+            // Thêm tiêu đề cho biểu đồ
+            chartTheoNgay.Titles.Add("Doanh thu theo từng ngày");
+            chartTheoNgay.Titles[0].Font = new Font("Time new roman", 10, FontStyle.Bold);
+
+            // Tạo series đường
+            Series series = new Series("Doanh thu");
+            series.ChartType = SeriesChartType.Line;
+            series.Color = Color.DodgerBlue;
+            series.BorderWidth = 2;
+            series.XValueType = ChartValueType.Date;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                DateTime ngay = Convert.ToDateTime(row["NgayLap"]);
+                decimal doanhThu = Convert.ToDecimal(row["DoanhThu"]);
+                series.Points.AddXY(ngay, doanhThu);
+            }
+
+            chartTheoNgay.Series.Add(series);
+            chartTheoNgay.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM";
+            chartTheoNgay.ChartAreas[0].AxisX.Interval = 1;
+            chartTheoNgay.ChartAreas[0].AxisX.Title = "Ngày";
+            chartTheoNgay.ChartAreas[0].AxisY.Title = "Doanh thu (VNĐ)";
+        }
+
+
+        private void LoadTyLeHinhThucBan()
+        {
+            string query = "SELECT TrangThai, COUNT(*) AS SoLuong FROM DonHang GROUP BY TrangThai";
+            DataTable dt = new Modify().GetDataTable(query);
+
+            chartHinhThuc.Series.Clear();
+            chartHinhThuc.Titles.Clear();
+
+            // Tiêu đề
+            chartHinhThuc.Titles.Add("Tỷ lệ trạng thái đơn hàng");
+            chartHinhThuc.Titles[0].Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            // Series dạng biểu đồ tròn
+            Series series = new Series("Trạng thái đơn");
+            series.ChartType = SeriesChartType.Pie;
+            series.IsValueShownAsLabel = true; // Hiện số lượng trên pie
+            series.LabelForeColor = Color.Black;
+            series.Font = new Font("Segoe UI", 9);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string trangThai = row["TrangThai"].ToString();
+                int soLuong = Convert.ToInt32(row["SoLuong"]);
+                series.Points.AddXY(trangThai, soLuong);
+            }
+
+            chartHinhThuc.Series.Add(series);
+        }
+
+        private void LoadTopSanPham()
+        {
+            string query = "SELECT TOP 5 Tensanpham, SUM(SoLuong) AS TongSoLuong FROM CT_DonHang GROUP BY Tensanpham ORDER BY TongSoLuong DESC";
+            DataTable dt = new Modify().GetDataTable(query);
+
+            flowTopSP.Controls.Clear();
+
+            // Thêm tiêu đề cho phần
+            Label title = new Label();
+            title.Text = "📌 Sản phẩm bán chạy nhất";
+            title.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            title.AutoSize = true;
+            title.Padding = new Padding(0, 5, 0, 10);
+            flowTopSP.Controls.Add(title);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                Label lbl = new Label();
+                lbl.Text = $"• {row["Tensanpham"]}: {row["TongSoLuong"]} chiếc";
+                lbl.AutoSize = true;
+                lbl.Font = new Font("Segoe UI", 10);
+                lbl.Padding = new Padding(10, 2, 0, 2);
+                flowTopSP.Controls.Add(lbl);
+            }
+        }
+
+        private void TongThanhTien()
+        {
+            DateTime tuNgay = dtpTuNgay.Value;
+            DateTime denNgay = dtpDenNgay.Value;
+            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+            decimal tongDoanhThu = 0;
+            decimal tongLoiNhuan = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                tongDoanhThu += Convert.ToDecimal(row["DoanhThu"]);
+                tongLoiNhuan += Convert.ToDecimal(row["LoiNhuan"]);
+            }
+            lblTongDoanhThu.Text = $"Doanh thu: {tongDoanhThu:N0} đ";
+            lblTongLoiNhuan.Text = $"Lợi nhuận: {tongLoiNhuan:N0} đ";
+        }
+
+        private void btnThongKe_Click_1(object sender, EventArgs e)
+        {
+            LoadDoanhThuTheoThang();
+            LoadDoanhThuTheoNgay();
+            LoadTyLeHinhThucBan();
+            LoadTopSanPham();
+            //  LoadTopDanhMuc();
+            TongThanhTien();
+        }
+        private void TkandBc_Click_1(object sender, EventArgs e)
+        {
+            panelThongke.Visible = !panelThongke.Visible;
+            if (panelThongke.Visible)
+            {
+                panelKhachHang.Visible = false;
+                panelLichSuKho.Visible = false;
+                panelDonhang.Visible = false;
+                panelDaiLy.Visible = false;
+            }
+        }
+        private void XuatBaoCaoRaExcel()
+        {
+            DateTime tuNgay = dtpTuNgay.Value;
+            DateTime denNgay = dtpDenNgay.Value;
+
+            var modify = new Modify();
+            DataTable dtDoanhThu = modify.LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+
+            // Tổng doanh thu và lợi nhuận
+            decimal tongDoanhThu = 0, tongLoiNhuan = 0;
+            foreach (DataRow row in dtDoanhThu.Rows)
+            {
+                tongDoanhThu += Convert.ToDecimal(row["DoanhThu"]);
+                tongLoiNhuan += Convert.ToDecimal(row["LoiNhuan"]);
+            }
+            decimal tySuatLN = tongDoanhThu == 0 ? 0 : tongLoiNhuan / tongDoanhThu * 100;
+
+            // Lấy top sản phẩm
+            string queryTopSP = "SELECT TOP 5 Tensanpham, SUM(SoLuong) AS TongSoLuong FROM CT_DonHang GROUP BY Tensanpham ORDER BY TongSoLuong DESC";
+            DataTable dtTopSP = modify.GetDataTable(queryTopSP);
+
+            using (var wb = new XLWorkbook())
+            {
+                // Sheet 1: Doanh thu theo ngày
+                var ws1 = wb.Worksheets.Add("Doanh thu theo ngày");
+                ws1.Cell("A1").Value = "Ngày";
+                ws1.Cell("B1").Value = "Doanh thu (VNĐ)";
+                ws1.Cell("C1").Value = "Lợi nhuận (VNĐ)";
+                ws1.Range("A1:C1").Style.Font.Bold = true;
+
+                int row = 2;
+                foreach (DataRow dataRow in dtDoanhThu.Rows)
+                {
+                    ws1.Cell(row, 1).Value = Convert.ToDateTime(dataRow["NgayLap"]).ToString("dd/MM/yyyy");
+                    ws1.Cell(row, 2).Value = Convert.ToDecimal(dataRow["DoanhThu"]);
+                    ws1.Cell(row, 3).Value = Convert.ToDecimal(dataRow["LoiNhuan"]);
+                    row++;
+                }
+
+                ws1.Columns().AdjustToContents();
+
+                // Sheet 2: Tổng kết
+                var ws2 = wb.Worksheets.Add("Tổng kết");
+                ws2.Cell("A1").Value = "Tổng doanh thu:";
+                ws2.Cell("B1").Value = tongDoanhThu;
+                ws2.Cell("A2").Value = "Tổng lợi nhuận:";
+                ws2.Cell("B2").Value = tongLoiNhuan;
+                ws2.Cell("A3").Value = "Tỷ suất lợi nhuận:";
+                ws2.Cell("B3").Value = $"{tySuatLN:0.##}%";
+
+                ws2.Range("A1:A3").Style.Font.Bold = true;
+                ws2.Columns().AdjustToContents();
+                ws2.Columns(2, 2).Style.NumberFormat.Format = "#,##0 đ";
+
+                // Sheet 3: Top sản phẩm bán chạy
+                var ws3 = wb.Worksheets.Add("Top sản phẩm");
+                ws3.Cell("A1").Value = "Tên sản phẩm";
+                ws3.Cell("B1").Value = "Số lượng bán";
+                ws3.Range("A1:B1").Style.Font.Bold = true;
+
+                int r = 2;
+                foreach (DataRow sp in dtTopSP.Rows)
+                {
+                    ws3.Cell(r, 1).Value = sp["Tensanpham"].ToString();
+                    ws3.Cell(r, 2).Value = Convert.ToInt32(sp["TongSoLuong"]);
+                    r++;
+                }
+
+                ws3.Columns().AdjustToContents();
+
+                // Hộp thoại lưu
+                SaveFileDialog sfd = new SaveFileDialog
+                {
+                    Filter = "Excel Workbook|*.xlsx",
+                    Title = "Lưu báo cáo thống kê",
+                    FileName = $"BaoCao_{DateTime.Now:yyyyMMdd}.xlsx"
+                };
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    wb.SaveAs(sfd.FileName);
+                    MessageBox.Show("Xuất báo cáo thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void btnxuatex_Click(object sender, EventArgs e)
+        {
+            XuatBaoCaoRaExcel();
+        }
+        #endregion
+
+        private void lblTongDoanhThu_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dtpDenNgay_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
+}

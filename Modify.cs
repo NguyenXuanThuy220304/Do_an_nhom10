@@ -507,6 +507,41 @@ namespace Do_an_P10
                 }
             }
         }
+        public DataTable LayBaoCaoDoanhThuTheoDonHang(DateTime tuNgay, DateTime denNgay)
+        {
+            string query = @"
+        SELECT 
+            CONVERT(date, dh.NgayLap) AS NgayLap,
+            SUM(ISNULL(ct.DonGia * ct.SoLuong, 0)) AS DoanhThu,
+            SUM(ISNULL(ct.DonGia * ct.SoLuong, 0) - ISNULL(pn.GiaNhapTB, 0)) AS LoiNhuan
+        FROM DonHang dh
+        JOIN CT_DonHang ct ON dh.MaDH = ct.MaDH
+        LEFT JOIN (
+            SELECT 
+                MaSP,
+                AVG(DonGiaNhap) AS GiaNhapTB
+            FROM CT_PhieuNhap
+            GROUP BY MaSP
+        ) pn ON pn.MaSP = ct.MaSP
+        WHERE dh.NgayLap BETWEEN @tuNgay AND @denNgay
+        GROUP BY CONVERT(date, dh.NgayLap)
+        ORDER BY NgayLap
+    ";
+
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@tuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@denNgay", denNgay);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+
+
 
     }
 }

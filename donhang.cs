@@ -13,6 +13,7 @@ namespace Do_an_P10
         public int MaKH { get; set; }
         public decimal TongTien { get; set; }
 
+        public donhang() { }
         public donhang(DateTime ngayLap, int maKH, decimal tongTien)
         {
             NgayLap = ngayLap;
