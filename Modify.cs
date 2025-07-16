@@ -75,7 +75,7 @@ namespace Do_an_P10
             }
             return tk;
         }
-        public bool ThemDaiLy(daily  dl)
+        public bool ThemDaiLy(daily dl)
         {
             string sql = @"INSERT INTO daily (TenDaiLy, Tensanpham, Diachi, SDT, Email) 
                        VALUES (@tendl, @tensp, @diac, @sdt,@email)";
@@ -559,9 +559,25 @@ ORDER BY Thang";
                 return dt;
             }
         }
+        public decimal LayTongTienNhap(DateTime tuNgay, DateTime denNgay)
+        {
+            string query = @"
+        SELECT SUM(ISNULL(ct.SoLuongNhap * ct.DonGiaNhap, 0)) AS TongNhap
+        FROM PhieuNhap pn
+        JOIN CT_PhieuNhap ct ON pn.MaPhieuNhap = ct.MaPhieuNhap
+        WHERE pn.NgayNhap BETWEEN @tuNgay AND @denNgay";
 
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                conn.Open(); // Mở kết nối
 
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@tuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@denNgay", denNgay);
 
-
+                object result = cmd.ExecuteScalar();
+                return result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+            }
+        }
     }
 }

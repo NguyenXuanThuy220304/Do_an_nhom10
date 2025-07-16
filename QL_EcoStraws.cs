@@ -589,6 +589,30 @@ namespace Do_an_P10
             using (SqlConnection conn = ketnoi.GetSqlConnection())
             {
                 conn.Open();
+
+                // ✅ Bước 1: Kiểm tra tồn kho trước khi lưu
+                foreach (var item in gioHang)
+                {
+                    string queryTon = "SELECT SoLuongTon FROM sanpham WHERE MaSP = @masp";
+                    SqlCommand cmdCheck = new SqlCommand(queryTon, conn);
+                    cmdCheck.Parameters.AddWithValue("@masp", item.MaSP);
+                    object result = cmdCheck.ExecuteScalar();
+
+                    if (result == null || result == DBNull.Value)
+                    {
+                        MessageBox.Show($"Không tìm thấy sản phẩm '{item.TenSP}' trong kho.");
+                        return;
+                    }
+
+                    int ton = Convert.ToInt32(result);
+                    if (item.SoLuong > ton)
+                    {
+                        MessageBox.Show($"Sản phẩm '{item.TenSP}' không đủ tồn kho! Chỉ còn {ton} hộp.");
+                        return;
+                    }
+                }
+
+                // ✅ Bước 2: Lưu đơn hàng và chi tiết trong transaction
                 SqlTransaction tran = conn.BeginTransaction();
 
                 try
@@ -597,29 +621,53 @@ namespace Do_an_P10
                     DateTime ngay = dtpNgayLap.Value;
                     decimal tong = gioHang.Sum(x => x.ThanhTien);
 
-                    // Insert DonHang
-                    SqlCommand cmd = new SqlCommand("INSERT INTO DonHang(NgayLap, MaKH, TongTien, TrangThai) OUTPUT INSERTED.MaDH VALUES (@ngay, @kh, @tong, @tt)", conn, tran);
-                    cmd.Parameters.AddWithValue("@tt", cbTrangThai.Text);
+                    // Lưu đơn hàng
+                    SqlCommand cmd = new SqlCommand(
+                        "INSERT INTO DonHang(NgayLap, MaKH, TongTien, TrangThai) OUTPUT INSERTED.MaDH " +
+                        "VALUES (@ngay, @kh, @tong, @tt)", conn, tran);
+
                     cmd.Parameters.AddWithValue("@ngay", ngay);
                     cmd.Parameters.AddWithValue("@kh", makh);
                     cmd.Parameters.AddWithValue("@tong", tong);
+                    cmd.Parameters.AddWithValue("@tt", cbTrangThai.Text);  // Hoặc "Đã thanh toán"
                     int madh = (int)cmd.ExecuteScalar();
 
-                    // Insert chi tiết
+                    // Lưu chi tiết đơn hàng + cập nhật kho + ghi lịch sử kho
                     foreach (var item in gioHang)
                     {
-                        SqlCommand ctdh = new SqlCommand("INSERT INTO CT_DonHang(MaDH, MaSP, Tensanpham, SoLuong, DonGia) VALUES (@madh, @masp, @ten, @sl, @gia)", conn, tran);
+                        // Thêm chi tiết đơn hàng
+                        SqlCommand ctdh = new SqlCommand(
+                            "INSERT INTO CT_DonHang(MaDH, MaSP, Tensanpham, SoLuong, DonGia) " +
+                            "VALUES (@madh, @masp, @ten, @sl, @gia)", conn, tran);
                         ctdh.Parameters.AddWithValue("@madh", madh);
                         ctdh.Parameters.AddWithValue("@masp", item.MaSP);
                         ctdh.Parameters.AddWithValue("@ten", item.TenSP);
                         ctdh.Parameters.AddWithValue("@sl", item.SoLuong);
                         ctdh.Parameters.AddWithValue("@gia", item.DonGia);
                         ctdh.ExecuteNonQuery();
+
+                        // Trừ kho
+                        SqlCommand capnhatTonKho = new SqlCommand(
+                            "UPDATE sanpham SET SoLuongTon = SoLuongTon - @sl WHERE MaSP = @masp", conn, tran);
+                        capnhatTonKho.Parameters.AddWithValue("@sl", item.SoLuong);
+                        capnhatTonKho.Parameters.AddWithValue("@masp", item.MaSP);
+                        capnhatTonKho.ExecuteNonQuery();
+
+                        // Ghi lịch sử kho
+                        SqlCommand lsKho = new SqlCommand(@"
+                    INSERT INTO LichSuKho (MaSP, SoLuong, LoaiThayDoi, GhiChu) 
+                    VALUES (@masp, @sl, @loai, @ghichu)", conn, tran);
+                        lsKho.Parameters.AddWithValue("@masp", item.MaSP);
+                        lsKho.Parameters.AddWithValue("@sl", item.SoLuong);
+                        lsKho.Parameters.AddWithValue("@loai", "Xuất bán");
+                        lsKho.Parameters.AddWithValue("@ghichu", $"Đơn hàng: {madh}");
+                        lsKho.ExecuteNonQuery();
                     }
 
                     tran.Commit();
                     MessageBox.Show("Lưu đơn hàng thành công!");
-
+                    LoadChiTietDonHang(madh);
+                    // Reset giao diện
                     gioHang.Clear();
                     dgvGioHang.DataSource = null;
                     lbTongTien.Text = "Tổng: 0 VNĐ";
@@ -628,10 +676,12 @@ namespace Do_an_P10
                 catch (Exception ex)
                 {
                     tran.Rollback();
-                    MessageBox.Show("Lỗi: " + ex.Message);
+                    MessageBox.Show("Lỗi khi lưu đơn hàng: " + ex.Message);
                 }
             }
         }
+
+
 
         private void btTimKiemDH_Click(object sender, EventArgs e)
         {
@@ -1622,28 +1672,26 @@ namespace Do_an_P10
             DateTime tuNgay = dtpTuNgay.Value.Date;
             DateTime denNgay = dtpDenNgay.Value.Date;
 
-            // Lấy dữ liệu doanh thu - lợi nhuận theo tháng
-            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoThang(tuNgay, denNgay);
-
+            // 1. Tính tổng doanh thu (theo ngày cho chính xác)
+            DataTable dtNgay = new Modify().LayBaoCaoDoanhThuTheoNgay(tuNgay, denNgay);
             decimal tongDoanhThu = 0;
-            decimal tongLoiNhuan = 0;
 
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRow row in dtNgay.Rows)
             {
-                // Kiểm tra và cộng doanh thu
                 if (row["DoanhThu"] != DBNull.Value)
                     tongDoanhThu += Convert.ToDecimal(row["DoanhThu"]);
-
-                // Kiểm tra và cộng lợi nhuận
-                if (row["LoiNhuan"] != DBNull.Value)
-                    tongLoiNhuan += Convert.ToDecimal(row["LoiNhuan"]);
             }
 
-            // Gán kết quả ra label với định dạng tiền tệ
-            lblTongDoanhThu.Text = $"Tổng doanh thu: {tongDoanhThu:N0} đ";
-            lblTongLoiNhuan.Text = $"Tổng lợi nhuận: {tongLoiNhuan:N0} đ";
-        }
+            // 2. Tính tổng tiền nhập
+            decimal tongNhap = new Modify().LayTongTienNhap(tuNgay, denNgay);
 
+            // 3. Tính lợi nhuận = Doanh thu - Nhập
+            decimal loiNhuan = tongDoanhThu - tongNhap;
+
+            // 4. Hiển thị kết quả
+            lblTongDoanhThu.Text = $"Tổng doanh thu: {tongDoanhThu:N0} đ";
+            lblTongLoiNhuan.Text = $"Tổng lợi nhuận: {loiNhuan:N0} đ (Doanh thu - Giá vốn)";
+        }
         private void btnThongKe_Click_1(object sender, EventArgs e)
         {
             LoadDoanhThuTheoThang();
