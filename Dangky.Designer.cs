@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dangky));
             label2 = new Label();
             tk = new TextBox();
             mk = new TextBox();
@@ -49,57 +50,61 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(48, 129);
+            label2.Font = new Font("Times New Roman", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(151, 207);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(140, 22);
+            label2.Size = new Size(190, 33);
             label2.TabIndex = 0;
             label2.Text = "Tên Đăng Nhập";
             // 
             // tk
             // 
             tk.BorderStyle = BorderStyle.FixedSingle;
-            tk.Location = new Point(48, 153);
-            tk.Margin = new Padding(3, 2, 3, 2);
+            tk.Location = new Point(151, 252);
+            tk.Margin = new Padding(4, 3, 4, 3);
             tk.Name = "tk";
-            tk.Size = new Size(294, 23);
+            tk.Size = new Size(419, 31);
             tk.TabIndex = 1;
             // 
             // mk
             // 
             mk.BorderStyle = BorderStyle.FixedSingle;
-            mk.Location = new Point(48, 247);
-            mk.Margin = new Padding(3, 2, 3, 2);
+            mk.Location = new Point(151, 396);
+            mk.Margin = new Padding(4, 3, 4, 3);
             mk.Name = "mk";
-            mk.Size = new Size(294, 23);
+            mk.Size = new Size(419, 31);
             mk.TabIndex = 3;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(48, 223);
+            label3.Font = new Font("Times New Roman", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Location = new Point(151, 351);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(90, 22);
+            label3.Size = new Size(121, 33);
             label3.TabIndex = 2;
             label3.Text = "Mật khẩu";
+            label3.Click += label3_Click;
             // 
             // nlmk
             // 
             nlmk.BorderStyle = BorderStyle.FixedSingle;
-            nlmk.Location = new Point(48, 320);
-            nlmk.Margin = new Padding(3, 2, 3, 2);
+            nlmk.Location = new Point(151, 530);
+            nlmk.Margin = new Padding(4, 3, 4, 3);
             nlmk.Name = "nlmk";
-            nlmk.Size = new Size(294, 23);
+            nlmk.Size = new Size(419, 31);
             nlmk.TabIndex = 5;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(48, 296);
+            label4.Font = new Font("Times New Roman", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label4.Location = new Point(151, 484);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(169, 22);
+            label4.Size = new Size(228, 33);
             label4.TabIndex = 4;
             label4.Text = "Xác nhận mật khẩu";
             // 
@@ -107,27 +112,28 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Times New Roman", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(48, 384);
+            label5.Location = new Point(151, 637);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(43, 17);
+            label5.Size = new Size(62, 24);
             label5.TabIndex = 4;
             label5.Text = "Email";
             // 
             // email
             // 
-            email.Location = new Point(48, 403);
-            email.Margin = new Padding(3, 2, 3, 2);
+            email.Location = new Point(151, 669);
+            email.Margin = new Padding(4, 3, 4, 3);
             email.Name = "email";
-            email.Size = new Size(294, 23);
+            email.Size = new Size(418, 31);
             email.TabIndex = 5;
             // 
             // dk
             // 
-            dk.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dk.Location = new Point(108, 461);
-            dk.Margin = new Padding(3, 2, 3, 2);
+            dk.Font = new Font("Times New Roman", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dk.Location = new Point(247, 765);
+            dk.Margin = new Padding(4, 3, 4, 3);
             dk.Name = "dk";
-            dk.Size = new Size(176, 38);
+            dk.Size = new Size(214, 52);
             dk.TabIndex = 6;
             dk.Text = "Đăng ký";
             dk.UseVisualStyleBackColor = true;
@@ -136,26 +142,28 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(48, 379);
+            label1.Font = new Font("Times New Roman", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(151, 628);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(58, 22);
+            label1.Size = new Size(80, 33);
             label1.TabIndex = 4;
             label1.Text = "Email";
             // 
             // em
             // 
             em.BorderStyle = BorderStyle.FixedSingle;
-            em.Location = new Point(48, 403);
-            em.Margin = new Padding(3, 2, 3, 2);
+            em.Location = new Point(151, 669);
+            em.Margin = new Padding(4, 3, 4, 3);
             em.Name = "em";
-            em.Size = new Size(294, 23);
+            em.Size = new Size(419, 31);
             em.TabIndex = 5;
             // 
             // pictureBox1
             // 
-            pictureBox1.Image = Properties.Resources.logo21;
-            pictureBox1.Location = new Point(442, 65);
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(726, 252);
+            pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(472, 467);
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -166,9 +174,10 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label7.Location = new Point(88, 513);
+            label7.Location = new Point(178, 852);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(136, 19);
+            label7.Size = new Size(212, 27);
             label7.TabIndex = 10;
             label7.Text = "Đã có sẵn tài khoản?";
             // 
@@ -177,9 +186,10 @@
             linkDN.AutoSize = true;
             linkDN.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             linkDN.LinkColor = Color.Black;
-            linkDN.Location = new Point(221, 513);
+            linkDN.Location = new Point(398, 852);
+            linkDN.Margin = new Padding(4, 0, 4, 0);
             linkDN.Name = "linkDN";
-            linkDN.Size = new Size(79, 19);
+            linkDN.Size = new Size(121, 27);
             linkDN.TabIndex = 11;
             linkDN.TabStop = true;
             linkDN.Text = "Đăng Nhập";
@@ -188,19 +198,21 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("Times New Roman", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(34, 53);
+            label6.Font = new Font("Times New Roman", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.Location = new Point(509, 78);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(250, 31);
+            label6.Size = new Size(360, 45);
             label6.TabIndex = 12;
             label6.Text = "Đăng Ký Tài Khoản";
+            label6.Click += label6_Click;
             // 
             // Dangky
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Honeydew;
-            ClientSize = new Size(959, 587);
+            ClientSize = new Size(1370, 978);
             Controls.Add(label6);
             Controls.Add(linkDN);
             Controls.Add(label7);
@@ -217,7 +229,7 @@
             Controls.Add(tk);
             Controls.Add(label2);
             ForeColor = SystemColors.ActiveCaptionText;
-            Margin = new Padding(3, 2, 3, 2);
+            Margin = new Padding(4, 3, 4, 3);
             Name = "Dangky";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Dangky";

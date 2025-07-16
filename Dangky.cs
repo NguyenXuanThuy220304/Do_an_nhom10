@@ -24,20 +24,18 @@ namespace Do_an_P10
         {
             if (string.IsNullOrWhiteSpace(e)) return false;
             e = e.Trim(); // Xóa khoảng trắng đầu/cuối nếu có
-            return Regex.IsMatch(e, @"^[a-zA-Z0-9_.]{3,50}@gmail\.com(\.vn)?$");
+            return Regex.IsMatch(e, @"^[a-zA-Z0-9_.@#]{3,50}@gmail\.com(\.vn)?$");
         }
 
         Modify modify = new Modify();
         private void dk_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Email.Text = [" + em.Text + "]");
             String tentk = tk.Text;
             String matk = mk.Text;
             String xacnhanmk = nlmk.Text;
             String Email = em.Text;
-            if (!checkacc(tentk)) { MessageBox.Show("Vui lòng nhập tên tài khoản dài 5-24 ky tu, ky tu chu, so, chu hoa, chu thuong"); return; }
-            if (!checkacc(matk)) { MessageBox.Show("vui long nhap ten mat khau dai 5-24 ky tu, ky tu chu, so, chu hoa, chu thuong"); return; }
-            if (xacnhanmk != matk) { MessageBox.Show("vui long kiem tra lai mat khau"); return; }
+            if (!checkacc(matk)) { MessageBox.Show("Vui lòng nhập mật khẩu dài từ 5 - 24 ký tự bao gồm ký tự, chữ thường, chữ hoa, số "); return; }
+            if (xacnhanmk != matk) { MessageBox.Show("Vui lòng kiểm tra lại mật khẩu!"); return; }
             if (!checkemail(Email))
             {
                 MessageBox.Show("Email nhập: [" + Email + "]");
@@ -73,5 +71,14 @@ namespace Do_an_P10
             this.Hide();
         }
 
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

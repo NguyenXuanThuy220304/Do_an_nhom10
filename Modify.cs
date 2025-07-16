@@ -507,26 +507,17 @@ namespace Do_an_P10
                 }
             }
         }
-        public DataTable LayBaoCaoDoanhThuTheoDonHang(DateTime tuNgay, DateTime denNgay)
+        public DataTable LayBaoCaoDoanhThuTheoNgay(DateTime tuNgay, DateTime denNgay)
         {
             string query = @"
-        SELECT 
-            CONVERT(date, dh.NgayLap) AS NgayLap,
-            SUM(ISNULL(ct.DonGia * ct.SoLuong, 0)) AS DoanhThu,
-            SUM(ISNULL(ct.DonGia * ct.SoLuong, 0) - ISNULL(pn.GiaNhapTB, 0)) AS LoiNhuan
-        FROM DonHang dh
-        JOIN CT_DonHang ct ON dh.MaDH = ct.MaDH
-        LEFT JOIN (
-            SELECT 
-                MaSP,
-                AVG(DonGiaNhap) AS GiaNhapTB
-            FROM CT_PhieuNhap
-            GROUP BY MaSP
-        ) pn ON pn.MaSP = ct.MaSP
-        WHERE dh.NgayLap BETWEEN @tuNgay AND @denNgay
-        GROUP BY CONVERT(date, dh.NgayLap)
-        ORDER BY NgayLap
-    ";
+SELECT 
+    CONVERT(date, dh.NgayLap) AS NgayLap,
+    SUM(ISNULL(ct.DonGia * ct.SoLuong, 0)) AS DoanhThu
+FROM DonHang dh
+JOIN CT_DonHang ct ON dh.MaDH = ct.MaDH
+WHERE dh.NgayLap BETWEEN @tuNgay AND @denNgay
+GROUP BY CONVERT(date, dh.NgayLap)
+ORDER BY NgayLap";
 
             using (SqlConnection conn = ketnoi.GetSqlConnection())
             {
@@ -540,6 +531,35 @@ namespace Do_an_P10
                 return dt;
             }
         }
+        public DataTable LayBaoCaoDoanhThuTheoThang(DateTime tuNgay, DateTime denNgay)
+        {
+            string query = @"
+SELECT 
+    FORMAT(dh.NgayLap, 'yyyy-MM') AS Thang,
+    SUM(ISNULL(ct.DonGia * ct.SoLuong, 0)) AS DoanhThu,
+    SUM(ISNULL((ct.DonGia - ISNULL(pn.DonGiaNhap, 0)) * ct.SoLuong, 0)) AS LoiNhuan
+FROM DonHang dh
+JOIN CT_DonHang ct ON dh.MaDH = ct.MaDH
+LEFT JOIN (
+    SELECT MaSP, DonGiaNhap FROM CT_PhieuNhap
+) pn ON pn.MaSP = ct.MaSP
+WHERE dh.NgayLap BETWEEN @tuNgay AND @denNgay
+GROUP BY FORMAT(dh.NgayLap, 'yyyy-MM')
+ORDER BY Thang";
+
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@tuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@denNgay", denNgay);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+
 
 
 

@@ -1490,62 +1490,76 @@ namespace Do_an_P10
         {
             DateTime tuNgay = dtpTuNgay.Value;
             DateTime denNgay = dtpDenNgay.Value;
-            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+
+            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoThang(tuNgay, denNgay);
 
             chartTheoThang.Series.Clear();
-            chartTheoThang.Titles.Clear(); // Xóa tiêu đề cũ nếu có
+            chartTheoThang.Titles.Clear();
 
             chartTheoThang.Titles.Add("Doanh thu và lợi nhuận theo tháng");
-            chartTheoThang.Titles[0].Font = new Font("Time new roman", 10, FontStyle.Bold);
+            chartTheoThang.Titles[0].Font = new Font("Times New Roman", 10, FontStyle.Bold);
 
             chartTheoThang.Series.Add("Doanh thu");
             chartTheoThang.Series.Add("Lợi nhuận");
 
+            chartTheoThang.Series["Doanh thu"].ChartType = SeriesChartType.Column;
+            chartTheoThang.Series["Lợi nhuận"].ChartType = SeriesChartType.Column;
+
             foreach (DataRow row in dt.Rows)
             {
-                DateTime ngay = Convert.ToDateTime(row["NgayLap"]);
+                string thang = row["Thang"].ToString(); // yyyy-MM
                 decimal doanhThu = Convert.ToDecimal(row["DoanhThu"]);
                 decimal loiNhuan = Convert.ToDecimal(row["LoiNhuan"]);
-                chartTheoThang.Series["Doanh thu"].Points.AddXY(ngay.ToString("MMM"), doanhThu);
-                chartTheoThang.Series["Lợi nhuận"].Points.AddXY(ngay.ToString("MMM"), loiNhuan);
+
+                chartTheoThang.Series["Doanh thu"].Points.AddXY(thang, doanhThu);
+                chartTheoThang.Series["Lợi nhuận"].Points.AddXY(thang, loiNhuan);
             }
         }
 
 
         private void LoadDoanhThuTheoNgay()
         {
-            DateTime tuNgay = dtpTuNgay.Value;
-            DateTime denNgay = dtpDenNgay.Value;
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
 
-            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+            // Gọi đúng hàm báo cáo theo ngày
+            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoNgay(tuNgay, denNgay);
 
             chartTheoNgay.Series.Clear();
             chartTheoNgay.Titles.Clear();
 
-            // Thêm tiêu đề cho biểu đồ
             chartTheoNgay.Titles.Add("Doanh thu theo từng ngày");
-            chartTheoNgay.Titles[0].Font = new Font("Time new roman", 10, FontStyle.Bold);
+            chartTheoNgay.Titles[0].Font = new Font("Times New Roman", 10, FontStyle.Bold);
 
-            // Tạo series đường
-            Series series = new Series("Doanh thu");
-            series.ChartType = SeriesChartType.Line;
-            series.Color = Color.DodgerBlue;
-            series.BorderWidth = 2;
-            series.XValueType = ChartValueType.Date;
+            Series series = new Series("Doanh thu")
+            {
+                ChartType = SeriesChartType.Line,
+                Color = Color.DodgerBlue,
+                BorderWidth = 2,
+                XValueType = ChartValueType.Date
+            };
 
             foreach (DataRow row in dt.Rows)
             {
-                DateTime ngay = Convert.ToDateTime(row["NgayLap"]);
-                decimal doanhThu = Convert.ToDecimal(row["DoanhThu"]);
-                series.Points.AddXY(ngay, doanhThu);
+                if (DateTime.TryParse(row["NgayLap"].ToString(), out DateTime ngay))
+                {
+                    decimal doanhThu = Convert.ToDecimal(row["DoanhThu"]);
+                    series.Points.AddXY(ngay, doanhThu);
+                }
             }
 
             chartTheoNgay.Series.Add(series);
-            chartTheoNgay.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM";
-            chartTheoNgay.ChartAreas[0].AxisX.Interval = 1;
-            chartTheoNgay.ChartAreas[0].AxisX.Title = "Ngày";
-            chartTheoNgay.ChartAreas[0].AxisY.Title = "Doanh thu (VNĐ)";
+
+            var chartArea = chartTheoNgay.ChartAreas[0];
+            chartArea.AxisX.LabelStyle.Format = "dd/MM";
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IntervalType = DateTimeIntervalType.Days;
+            chartArea.AxisX.Title = "Ngày";
+            chartArea.AxisY.Title = "Doanh thu (VNĐ)";
+            chartArea.AxisX.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
         }
+
 
 
         private void LoadTyLeHinhThucBan()
@@ -1605,18 +1619,29 @@ namespace Do_an_P10
 
         private void TongThanhTien()
         {
-            DateTime tuNgay = dtpTuNgay.Value;
-            DateTime denNgay = dtpDenNgay.Value;
-            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
+
+            // Lấy dữ liệu doanh thu - lợi nhuận theo tháng
+            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoThang(tuNgay, denNgay);
+
             decimal tongDoanhThu = 0;
             decimal tongLoiNhuan = 0;
+
             foreach (DataRow row in dt.Rows)
             {
-                tongDoanhThu += Convert.ToDecimal(row["DoanhThu"]);
-                tongLoiNhuan += Convert.ToDecimal(row["LoiNhuan"]);
+                // Kiểm tra và cộng doanh thu
+                if (row["DoanhThu"] != DBNull.Value)
+                    tongDoanhThu += Convert.ToDecimal(row["DoanhThu"]);
+
+                // Kiểm tra và cộng lợi nhuận
+                if (row["LoiNhuan"] != DBNull.Value)
+                    tongLoiNhuan += Convert.ToDecimal(row["LoiNhuan"]);
             }
-            lblTongDoanhThu.Text = $"Doanh thu: {tongDoanhThu:N0} đ";
-            lblTongLoiNhuan.Text = $"Lợi nhuận: {tongLoiNhuan:N0} đ";
+
+            // Gán kết quả ra label với định dạng tiền tệ
+            lblTongDoanhThu.Text = $"Tổng doanh thu: {tongDoanhThu:N0} đ";
+            lblTongLoiNhuan.Text = $"Tổng lợi nhuận: {tongLoiNhuan:N0} đ";
         }
 
         private void btnThongKe_Click_1(object sender, EventArgs e)
@@ -1641,40 +1666,43 @@ namespace Do_an_P10
         }
         private void XuatBaoCaoRaExcel()
         {
-            DateTime tuNgay = dtpTuNgay.Value;
-            DateTime denNgay = dtpDenNgay.Value;
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
 
             var modify = new Modify();
-            DataTable dtDoanhThu = modify.LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
 
-            // Tổng doanh thu và lợi nhuận
+            // Lấy dữ liệu doanh thu theo tháng
+            DataTable dtDoanhThu = modify.LayBaoCaoDoanhThuTheoThang(tuNgay, denNgay);
+
+            // Tính tổng doanh thu & lợi nhuận
             decimal tongDoanhThu = 0, tongLoiNhuan = 0;
             foreach (DataRow row in dtDoanhThu.Rows)
             {
-                tongDoanhThu += Convert.ToDecimal(row["DoanhThu"]);
-                tongLoiNhuan += Convert.ToDecimal(row["LoiNhuan"]);
+                tongDoanhThu += row["DoanhThu"] != DBNull.Value ? Convert.ToDecimal(row["DoanhThu"]) : 0;
+                tongLoiNhuan += row["LoiNhuan"] != DBNull.Value ? Convert.ToDecimal(row["LoiNhuan"]) : 0;
             }
-            decimal tySuatLN = tongDoanhThu == 0 ? 0 : tongLoiNhuan / tongDoanhThu * 100;
 
-            // Lấy top sản phẩm
-            string queryTopSP = "SELECT TOP 5 Tensanpham, SUM(SoLuong) AS TongSoLuong FROM CT_DonHang GROUP BY Tensanpham ORDER BY TongSoLuong DESC";
-            DataTable dtTopSP = modify.GetDataTable(queryTopSP);
+            decimal tySuatLN = tongDoanhThu == 0 ? 0 : tongLoiNhuan / tongDoanhThu * 100;
 
             using (var wb = new XLWorkbook())
             {
-                // Sheet 1: Doanh thu theo ngày
-                var ws1 = wb.Worksheets.Add("Doanh thu theo ngày");
-                ws1.Cell("A1").Value = "Ngày";
+                // Sheet 1: Doanh thu theo tháng
+                var ws1 = wb.Worksheets.Add("Doanh thu theo tháng");
+                ws1.Cell("A1").Value = "Tháng (yyyy-MM)";
                 ws1.Cell("B1").Value = "Doanh thu (VNĐ)";
                 ws1.Cell("C1").Value = "Lợi nhuận (VNĐ)";
                 ws1.Range("A1:C1").Style.Font.Bold = true;
 
                 int row = 2;
-                foreach (DataRow dataRow in dtDoanhThu.Rows)
+                foreach (DataRow dr in dtDoanhThu.Rows)
                 {
-                    ws1.Cell(row, 1).Value = Convert.ToDateTime(dataRow["NgayLap"]).ToString("dd/MM/yyyy");
-                    ws1.Cell(row, 2).Value = Convert.ToDecimal(dataRow["DoanhThu"]);
-                    ws1.Cell(row, 3).Value = Convert.ToDecimal(dataRow["LoiNhuan"]);
+                    string thang = dr["Thang"].ToString();
+                    decimal doanhThu = Convert.ToDecimal(dr["DoanhThu"]);
+                    decimal loiNhuan = Convert.ToDecimal(dr["LoiNhuan"]);
+
+                    ws1.Cell(row, 1).Value = thang;
+                    ws1.Cell(row, 2).Value = doanhThu;
+                    ws1.Cell(row, 3).Value = loiNhuan;
                     row++;
                 }
 
@@ -1693,37 +1721,23 @@ namespace Do_an_P10
                 ws2.Columns().AdjustToContents();
                 ws2.Columns(2, 2).Style.NumberFormat.Format = "#,##0 đ";
 
-                // Sheet 3: Top sản phẩm bán chạy
-                var ws3 = wb.Worksheets.Add("Top sản phẩm");
-                ws3.Cell("A1").Value = "Tên sản phẩm";
-                ws3.Cell("B1").Value = "Số lượng bán";
-                ws3.Range("A1:B1").Style.Font.Bold = true;
-
-                int r = 2;
-                foreach (DataRow sp in dtTopSP.Rows)
+                // Hộp thoại lưu file
+                using (SaveFileDialog sfd = new SaveFileDialog())
                 {
-                    ws3.Cell(r, 1).Value = sp["Tensanpham"].ToString();
-                    ws3.Cell(r, 2).Value = Convert.ToInt32(sp["TongSoLuong"]);
-                    r++;
-                }
+                    sfd.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
+                    sfd.Title = "Lưu báo cáo theo tháng";
+                    sfd.FileName = $"BaoCao_Thang_{DateTime.Now:yyyyMMdd}.xlsx";
 
-                ws3.Columns().AdjustToContents();
-
-                // Hộp thoại lưu
-                SaveFileDialog sfd = new SaveFileDialog
-                {
-                    Filter = "Excel Workbook|*.xlsx",
-                    Title = "Lưu báo cáo thống kê",
-                    FileName = $"BaoCao_{DateTime.Now:yyyyMMdd}.xlsx"
-                };
-
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    wb.SaveAs(sfd.FileName);
-                    MessageBox.Show("Xuất báo cáo thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        wb.SaveAs(sfd.FileName);
+                        MessageBox.Show("Xuất báo cáo theo tháng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
         }
+
+
 
         private void btnxuatex_Click(object sender, EventArgs e)
         {
