@@ -1340,9 +1340,27 @@ namespace Do_an_P10
 
             DataRowView row = cbSP.SelectedItem as DataRowView;
             int maSP = Convert.ToInt32(row["MaSP"]);
-            string tenSP = row["TenSP"].ToString();
+            string tenSP = row["TenDayDu"].ToString(); // ✅ đúng cột tên hiển thị đã gộp
 
-            // Kiểm tra và ép kiểu từ TextBox
+            // 🔍 Lấy tên sản phẩm mà đại lý được phép bán
+            string tenSP_DaiLy = "";
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                string query = "SELECT Tensanpham FROM daily WHERE MaDaiLy = @MaDL";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@MaDL", cbDaiLy.SelectedValue);
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+                tenSP_DaiLy = result?.ToString();
+            }
+
+            if (string.IsNullOrWhiteSpace(tenSP_DaiLy) || !tenSP.StartsWith(tenSP_DaiLy))
+            {
+                MessageBox.Show("Sản phẩm này không thuộc danh mục đại lý đang bán.");
+                return;
+            }
+
+            // Kiểm tra số lượng và đơn giá
             if (!int.TryParse(txtSL.Text.Trim(), out int soLuong))
             {
                 MessageBox.Show("Vui lòng nhập đúng số lượng (số nguyên).");
@@ -1355,15 +1373,25 @@ namespace Do_an_P10
                 return;
             }
 
-            var sp = new SanPhamNhap
+            // ✅ Gộp sản phẩm nếu trùng (không tạo dòng mới)
+            var spTonTai = danhSachNhap.FirstOrDefault(sp => sp.MaSP == maSP);
+            if (spTonTai != null)
             {
-                MaSP = maSP,
-                TenSP = tenSP,
-                SoLuongNhap = soLuong,
-                DonGiaNhap = donGia
-            };
+                spTonTai.SoLuongNhap += soLuong;
+                spTonTai.DonGiaNhap = donGia; // Cập nhật giá nếu cần
+            }
+            else
+            {
+                var sp = new SanPhamNhap
+                {
+                    MaSP = maSP,
+                    TenSP = tenSP,
+                    SoLuongNhap = soLuong,
+                    DonGiaNhap = donGia
+                };
+                danhSachNhap.Add(sp);
+            }
 
-            danhSachNhap.Add(sp);
             dgvChonSanPham.Refresh();
             TinhTongThanhTien();
         }
@@ -1372,11 +1400,13 @@ namespace Do_an_P10
         {
             using (SqlConnection conn = ketnoi.GetSqlConnection())
             {
-                SqlDataAdapter da = new SqlDataAdapter("SELECT MaSP, TenSP FROM sanpham", conn);
+                string query = "SELECT MaSP, TenSP + ' - ' + KichThuoc AS TenDayDu FROM sanpham";
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
+
                 cbSP.DataSource = dt;
-                cbSP.DisplayMember = "TenSP";
+                cbSP.DisplayMember = "TenDayDu";  // Gộp tên + kích thước
                 cbSP.ValueMember = "MaSP";
             }
         }
@@ -1392,5 +1422,55 @@ namespace Do_an_P10
             lbTongTienDL.Text = tong.ToString("N0") + " đ"; // Định dạng tiền đẹp hơn
         }
 
+        private void cbDaiLy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Tránh lỗi cast khi SelectedValue đang là DataRowView
+            if (cbDaiLy.SelectedValue == null || cbDaiLy.SelectedValue is DataRowView)
+                return;
+
+            int maDL = Convert.ToInt32(cbDaiLy.SelectedValue);
+
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                conn.Open();
+
+                // 1. Lấy tên sản phẩm mà đại lý đó bán
+                string queryTenSP = "SELECT Tensanpham FROM daily WHERE MaDaiLy = @MaDL";
+                SqlCommand cmd = new SqlCommand(queryTenSP, conn);
+                cmd.Parameters.AddWithValue("@MaDL", maDL);
+                string tenSP = cmd.ExecuteScalar()?.ToString();
+
+                if (string.IsNullOrWhiteSpace(tenSP))
+                {
+                    MessageBox.Show("Đại lý chưa có sản phẩm nào được gán.");
+                    cbSP.DataSource = null;
+                    return;
+                }
+
+                // 2. Lấy danh sách sản phẩm theo tên + gộp kích thước
+                string querySP = @"
+            SELECT MaSP, TenSP + ' - ' + KichThuoc AS TenDayDu 
+            FROM sanpham 
+            WHERE TenSP = @TenSP";
+
+                SqlCommand cmd2 = new SqlCommand(querySP, conn);
+                cmd2.Parameters.AddWithValue("@TenSP", tenSP);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd2);
+                DataTable dtSP = new DataTable();
+                da.Fill(dtSP);
+
+                if (dtSP.Rows.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy sản phẩm phù hợp trong danh mục.");
+                    cbSP.DataSource = null;
+                    return;
+                }
+
+                cbSP.DataSource = dtSP;
+                cbSP.DisplayMember = "TenDayDu"; // Gộp tên và kích thước
+                cbSP.ValueMember = "MaSP";
+            }
+        }
+        }
     }
-}

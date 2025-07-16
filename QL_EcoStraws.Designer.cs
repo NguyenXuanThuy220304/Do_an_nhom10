@@ -1914,6 +1914,7 @@
             cbDaiLy.Name = "cbDaiLy";
             cbDaiLy.Size = new Size(248, 30);
             cbDaiLy.TabIndex = 10;
+            cbDaiLy.SelectedIndexChanged += cbDaiLy_SelectedIndexChanged;
             // 
             // lbTongTienDL
             // 
