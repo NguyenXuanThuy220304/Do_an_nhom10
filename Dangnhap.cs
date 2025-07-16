@@ -54,7 +54,7 @@ namespace Do_an_P10
                         String sql = "Select * from khachhang where tentaikhoan = '" + tentk + "' ";
                         if (modify.kh(sql).Count() != 0)
                         {
-                            MessageBox.Show("Đăng nhập thành công!");
+                            
                             EcoStraws ec = new EcoStraws(tentk);
                             ec.Show();
                             this.Hide();

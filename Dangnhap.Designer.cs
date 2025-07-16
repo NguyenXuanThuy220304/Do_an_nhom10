@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dangnhap));
             imageList1 = new ImageList(components);
             imageList2 = new ImageList(components);
             tk = new TextBox();
@@ -86,9 +87,9 @@
             label1.Location = new Point(47, 183);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(167, 26);
+            label1.Size = new Size(115, 26);
             label1.TabIndex = 2;
-            label1.Text = "Tài Đăng Nhập";
+            label1.Text = "Tài khoản";
             // 
             // label2
             // 
@@ -191,7 +192,7 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            BackgroundImage = Properties.Resources.phan_huy_03_thang;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1347, 903);
             Controls.Add(panel1);

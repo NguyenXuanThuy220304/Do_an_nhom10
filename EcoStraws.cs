@@ -138,14 +138,7 @@ namespace Do_an_P10
             DisplayProducts(filtered);
         }
 
-        private void t_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panelmathang_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+     
     }
 }
+

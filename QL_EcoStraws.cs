@@ -658,7 +658,7 @@ namespace Do_an_P10
                     INSERT INTO LichSuKho (MaSP, SoLuong, LoaiThayDoi, GhiChu) 
                     VALUES (@masp, @sl, @loai, @ghichu)", conn, tran);
                         lsKho.Parameters.AddWithValue("@masp", item.MaSP);
-                        lsKho.Parameters.AddWithValue("@sl", item.SoLuong);
+                        lsKho.Parameters.AddWithValue("@sl", $"- {item.SoLuong}");
                         lsKho.Parameters.AddWithValue("@loai", "Xuất bán");
                         lsKho.Parameters.AddWithValue("@ghichu", $"Đơn hàng: {madh}");
                         lsKho.ExecuteNonQuery();
@@ -1648,20 +1648,26 @@ namespace Do_an_P10
 
             flowTopSP.Controls.Clear();
 
-            // Thêm tiêu đề cho phần
+            // Cài đặt hiển thị theo cột dọc
+            flowTopSP.FlowDirection = FlowDirection.TopDown;
+            flowTopSP.WrapContents = false;
+            flowTopSP.AutoScroll = true;
+
+            // Tiêu đề
             Label title = new Label();
             title.Text = "📌 Sản phẩm bán chạy nhất";
-            title.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            title.Font = new Font("Time New Roman", 11, FontStyle.Bold);
             title.AutoSize = true;
             title.Padding = new Padding(0, 5, 0, 10);
             flowTopSP.Controls.Add(title);
 
+            // Danh sách sản phẩm
             foreach (DataRow row in dt.Rows)
             {
                 Label lbl = new Label();
-                lbl.Text = $"• {row["Tensanpham"]}: {row["TongSoLuong"]} chiếc";
+                lbl.Text = $"• {row["Tensanpham"]}: {row["TongSoLuong"]} hộp";
                 lbl.AutoSize = true;
-                lbl.Font = new Font("Segoe UI", 10);
+                lbl.Font = new Font("Time New Roman", 10);
                 lbl.Padding = new Padding(10, 2, 0, 2);
                 flowTopSP.Controls.Add(lbl);
             }
@@ -1690,7 +1696,7 @@ namespace Do_an_P10
 
             // 4. Hiển thị kết quả
             lblTongDoanhThu.Text = $"Tổng doanh thu: {tongDoanhThu:N0} đ";
-            lblTongLoiNhuan.Text = $"Tổng lợi nhuận: {loiNhuan:N0} đ (Doanh thu - Giá vốn)";
+            lblTongLoiNhuan.Text = $"Tổng lợi nhuận: {loiNhuan:N0} đ";
         }
         private void btnThongKe_Click_1(object sender, EventArgs e)
         {
@@ -1719,12 +1725,34 @@ namespace Do_an_P10
 
             var modify = new Modify();
 
-            // Lấy dữ liệu doanh thu theo tháng
-            DataTable dtDoanhThu = modify.LayBaoCaoDoanhThuTheoThang(tuNgay, denNgay);
+            // Lấy dữ liệu
+            DataTable dtThang = modify.LayBaoCaoDoanhThuTheoThang(tuNgay, denNgay);
+            DataTable dtNgay = modify.LayBaoCaoDoanhThuTheoNgay(tuNgay, denNgay);
+            decimal tongNhap = modify.LayTongTienNhap(tuNgay, denNgay);
 
-            // Tính tổng doanh thu & lợi nhuận
-            decimal tongDoanhThu = 0, tongLoiNhuan = 0;
-            foreach (DataRow row in dtDoanhThu.Rows)
+            // Lấy đơn hàng theo thời gian
+            string queryDH = @"
+        SELECT dh.MaDH, kh.Hoten, dh.NgayLap, dh.TongTien, dh.TrangThai
+        FROM DonHang dh
+        JOIN KhachHang kh ON dh.MaKH = kh.MaKH
+        WHERE dh.NgayLap BETWEEN @tuNgay AND @denNgay
+        ORDER BY dh.NgayLap DESC";
+
+            DataTable dtDonHang = new DataTable();
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(queryDH, conn);
+                cmd.Parameters.AddWithValue("@tuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@denNgay", denNgay);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dtDonHang);
+            }
+
+            // Tổng hợp dữ liệu
+            decimal tongDoanhThu = 0;
+            decimal tongLoiNhuan = 0;
+            foreach (DataRow row in dtThang.Rows)
             {
                 tongDoanhThu += row["DoanhThu"] != DBNull.Value ? Convert.ToDecimal(row["DoanhThu"]) : 0;
                 tongLoiNhuan += row["LoiNhuan"] != DBNull.Value ? Convert.ToDecimal(row["LoiNhuan"]) : 0;
@@ -1736,54 +1764,96 @@ namespace Do_an_P10
             {
                 // Sheet 1: Doanh thu theo tháng
                 var ws1 = wb.Worksheets.Add("Doanh thu theo tháng");
-                ws1.Cell("A1").Value = "Tháng (yyyy-MM)";
+                ws1.Cell("A1").Value = "Tháng";
                 ws1.Cell("B1").Value = "Doanh thu (VNĐ)";
                 ws1.Cell("C1").Value = "Lợi nhuận (VNĐ)";
                 ws1.Range("A1:C1").Style.Font.Bold = true;
 
-                int row = 2;
-                foreach (DataRow dr in dtDoanhThu.Rows)
+                int r1 = 2;
+                foreach (DataRow dr in dtThang.Rows)
                 {
-                    string thang = dr["Thang"].ToString();
-                    decimal doanhThu = Convert.ToDecimal(dr["DoanhThu"]);
-                    decimal loiNhuan = Convert.ToDecimal(dr["LoiNhuan"]);
-
-                    ws1.Cell(row, 1).Value = thang;
-                    ws1.Cell(row, 2).Value = doanhThu;
-                    ws1.Cell(row, 3).Value = loiNhuan;
-                    row++;
+                    ws1.Cell(r1, 1).Value = dr["Thang"].ToString();
+                    ws1.Cell(r1, 2).Value = Convert.ToDecimal(dr["DoanhThu"]);
+                    ws1.Cell(r1, 3).Value = Convert.ToDecimal(dr["LoiNhuan"]);
+                    r1++;
                 }
-
                 ws1.Columns().AdjustToContents();
 
-                // Sheet 2: Tổng kết
-                var ws2 = wb.Worksheets.Add("Tổng kết");
-                ws2.Cell("A1").Value = "Tổng doanh thu:";
-                ws2.Cell("B1").Value = tongDoanhThu;
-                ws2.Cell("A2").Value = "Tổng lợi nhuận:";
-                ws2.Cell("B2").Value = tongLoiNhuan;
-                ws2.Cell("A3").Value = "Tỷ suất lợi nhuận:";
-                ws2.Cell("B3").Value = $"{tySuatLN:0.##}%";
+                // Sheet 2: Doanh thu theo ngày
+                var ws2 = wb.Worksheets.Add("Doanh thu theo ngày");
+                ws2.Cell("A1").Value = "Ngày";
+                ws2.Cell("B1").Value = "Doanh thu (VNĐ)";
+                ws2.Range("A1:B1").Style.Font.Bold = true;
 
-                ws2.Range("A1:A3").Style.Font.Bold = true;
+                int r2 = 2;
+                foreach (DataRow dr in dtNgay.Rows)
+                {
+                    ws2.Cell(r2, 1).Value = Convert.ToDateTime(dr["NgayLap"]).ToString("dd/MM/yyyy");
+                    ws2.Cell(r2, 2).Value = Convert.ToDecimal(dr["DoanhThu"]);
+                    r2++;
+                }
                 ws2.Columns().AdjustToContents();
-                ws2.Columns(2, 2).Style.NumberFormat.Format = "#,##0 đ";
 
-                // Hộp thoại lưu file
+                // Sheet 3: Đơn hàng
+                var ws3 = wb.Worksheets.Add("Đơn hàng");
+                ws3.Cell("A1").Value = "Mã ĐH";
+                ws3.Cell("B1").Value = "Khách hàng";
+                ws3.Cell("C1").Value = "Ngày lập";
+                ws3.Cell("D1").Value = "Tổng tiền (VNĐ)";
+                ws3.Cell("E1").Value = "Trạng thái";
+                ws3.Range("A1:E1").Style.Font.Bold = true;
+
+                int r3 = 2;
+                foreach (DataRow dr in dtDonHang.Rows)
+                {
+                    ws3.Cell(r3, 1).Value = dr["MaDH"] != DBNull.Value ? Convert.ToInt32(dr["MaDH"]) : 0;
+                    ws3.Cell(r3, 2).Value = dr["Hoten"].ToString();
+                    ws3.Cell(r3, 3).Value = Convert.ToDateTime(dr["NgayLap"]).ToString("dd/MM/yyyy");
+                    ws3.Cell(r3, 4).Value = Convert.ToDecimal(dr["TongTien"]);
+                    ws3.Cell(r3, 5).Value = dr["TrangThai"].ToString();
+                    r3++;
+                }
+                ws3.Columns().AdjustToContents();
+
+                // Sheet 4: Tổng kết
+                var ws4 = wb.Worksheets.Add("Tổng kết");
+                ws4.Cell("A1").Value = "Tổng doanh thu:";
+                ws4.Cell("B1").Value = tongDoanhThu;
+
+                ws4.Cell("A2").Value = "Tổng lợi nhuận (tính từ đơn hàng):";
+                ws4.Cell("B2").Value = tongLoiNhuan;
+
+                ws4.Cell("A3").Value = "Tổng tiền nhập kho:";
+                ws4.Cell("B3").Value = tongNhap;
+
+                ws4.Cell("A4").Value = "Lợi nhuận thực tế:";
+                ws4.Cell("B4").Value = tongDoanhThu - tongNhap;
+
+                ws4.Cell("A5").Value = "Tỷ suất lợi nhuận (%):";
+                ws4.Cell("B5").Value = tySuatLN;
+                ws4.Cell("B5").Style.NumberFormat.Format = "0.##\\%";
+
+                ws4.Range("A1:A5").Style.Font.Bold = true;
+                ws4.Columns().AdjustToContents();
+                ws4.Columns(2, 2).Style.NumberFormat.Format = "#,##0 đ";
+
+                // Xuất file
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {
                     sfd.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
-                    sfd.Title = "Lưu báo cáo theo tháng";
-                    sfd.FileName = $"BaoCao_Thang_{DateTime.Now:yyyyMMdd}.xlsx";
+                    sfd.Title = "Lưu báo cáo tổng hợp";
+                    sfd.FileName = $"BaoCaoTongHop_{DateTime.Now:yyyyMMdd}.xlsx";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
                         wb.SaveAs(sfd.FileName);
-                        MessageBox.Show("Xuất báo cáo theo tháng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Xuất báo cáo thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
         }
+
+
 
 
 

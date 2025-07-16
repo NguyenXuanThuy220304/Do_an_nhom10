@@ -129,7 +129,7 @@
             // 
             // dk
             // 
-            dk.Font = new Font("Times New Roman", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dk.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             dk.Location = new Point(247, 765);
             dk.Margin = new Padding(4, 3, 4, 3);
             dk.Name = "dk";

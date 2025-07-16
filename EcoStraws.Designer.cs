@@ -55,7 +55,7 @@
             // gio
             // 
             gio.BackColor = Color.White;
-            gio.BackgroundImage = Properties.Resources.giohanganh;
+            gio.BackgroundImage = (Image)resources.GetObject("gio.BackgroundImage");
             gio.BackgroundImageLayout = ImageLayout.Stretch;
             gio.ImageAlign = ContentAlignment.BottomRight;
             gio.Location = new Point(1164, 80);
@@ -88,11 +88,10 @@
             t.ReadOnly = true;
             t.Size = new Size(191, 31);
             t.TabIndex = 2;
-            t.TextChanged += t_TextChanged;
             // 
             // pictureBox2
             // 
-            pictureBox2.Image = Properties.Resources.avt;
+            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
             pictureBox2.Location = new Point(1246, 8);
             pictureBox2.Margin = new Padding(4);
             pictureBox2.Name = "pictureBox2";
@@ -174,6 +173,7 @@
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox3.TabIndex = 16;
             pictureBox3.TabStop = false;
+
             // 
             // panel2
             // 
@@ -186,10 +186,10 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.BackgroundImage = Properties.Resources.ictimkiem;
+            pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
             pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
             pictureBox1.Dock = DockStyle.Left;
-            pictureBox1.Image = Properties.Resources.ictimkiem;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(57, 52);
@@ -218,7 +218,6 @@
             panelmathang.Name = "panelmathang";
             panelmathang.Size = new Size(1515, 651);
             panelmathang.TabIndex = 15;
-            panelmathang.Paint += panelmathang_Paint;
             // 
             // EcoStraws
             // 
