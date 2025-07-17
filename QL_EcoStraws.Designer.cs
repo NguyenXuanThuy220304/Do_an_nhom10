@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QL_EcoStraws));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
             menu = new Panel();
             linkThoat = new LinkLabel();
             button3 = new Button();
@@ -1613,7 +1613,7 @@
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label14.Location = new Point(24, 60);
+            label14.Location = new Point(20, 60);
             label14.Margin = new Padding(2, 0, 2, 0);
             label14.Name = "label14";
             label14.Size = new Size(88, 23);
@@ -1623,26 +1623,27 @@
             // txtma
             // 
             txtma.BorderStyle = BorderStyle.FixedSingle;
-            txtma.Location = new Point(144, 56);
+            txtma.Location = new Point(153, 57);
             txtma.Margin = new Padding(2);
             txtma.Name = "txtma";
-            txtma.Size = new Size(234, 30);
+            txtma.Size = new Size(225, 30);
             txtma.TabIndex = 1;
             // 
             // txtE
             // 
             txtE.BorderStyle = BorderStyle.FixedSingle;
-            txtE.Location = new Point(141, 526);
+            txtE.Location = new Point(154, 417);
             txtE.Margin = new Padding(2);
             txtE.Name = "txtE";
-            txtE.Size = new Size(235, 30);
+            txtE.Size = new Size(223, 30);
             txtE.TabIndex = 1;
+            txtE.TextChanged += txtE_TextChanged;
             // 
             // label19
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label19.Location = new Point(24, 530);
+            label19.Location = new Point(21, 419);
             label19.Margin = new Padding(2, 0, 2, 0);
             label19.Name = "label19";
             label19.Size = new Size(58, 23);
@@ -1654,7 +1655,7 @@
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label15.Location = new Point(25, 154);
+            label15.Location = new Point(20, 133);
             label15.Margin = new Padding(2, 0, 2, 0);
             label15.Name = "label15";
             label15.Size = new Size(92, 23);
@@ -1664,35 +1665,35 @@
             // txttendaily
             // 
             txttendaily.BorderStyle = BorderStyle.FixedSingle;
-            txttendaily.Location = new Point(141, 150);
+            txttendaily.Location = new Point(153, 129);
             txttendaily.Margin = new Padding(2);
             txttendaily.Name = "txttendaily";
-            txttendaily.Size = new Size(237, 30);
+            txttendaily.Size = new Size(225, 30);
             txttendaily.TabIndex = 1;
             // 
             // txtsodt
             // 
             txtsodt.BorderStyle = BorderStyle.FixedSingle;
-            txtsodt.Location = new Point(141, 444);
+            txtsodt.Location = new Point(153, 344);
             txtsodt.Margin = new Padding(2);
             txtsodt.Name = "txtsodt";
-            txtsodt.Size = new Size(237, 30);
+            txtsodt.Size = new Size(225, 30);
             txtsodt.TabIndex = 1;
             // 
             // txttensp
             // 
             txttensp.BorderStyle = BorderStyle.FixedSingle;
-            txttensp.Location = new Point(141, 238);
+            txttensp.Location = new Point(154, 201);
             txttensp.Margin = new Padding(2);
             txttensp.Name = "txttensp";
-            txttensp.Size = new Size(235, 30);
+            txttensp.Size = new Size(223, 30);
             txttensp.TabIndex = 1;
             // 
             // label18
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label18.Location = new Point(24, 448);
+            label18.Location = new Point(20, 349);
             label18.Margin = new Padding(2, 0, 2, 0);
             label18.Name = "label18";
             label18.Size = new Size(118, 23);
@@ -1703,17 +1704,17 @@
             // txtdchi
             // 
             txtdchi.BorderStyle = BorderStyle.FixedSingle;
-            txtdchi.Location = new Point(141, 346);
+            txtdchi.Location = new Point(153, 272);
             txtdchi.Margin = new Padding(2);
             txtdchi.Name = "txtdchi";
-            txtdchi.Size = new Size(235, 30);
+            txtdchi.Size = new Size(223, 30);
             txtdchi.TabIndex = 1;
             // 
             // label16
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label16.Location = new Point(24, 242);
+            label16.Location = new Point(20, 203);
             label16.Margin = new Padding(2, 0, 2, 0);
             label16.Name = "label16";
             label16.Size = new Size(125, 23);
@@ -1725,7 +1726,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label17.Location = new Point(24, 350);
+            label17.Location = new Point(20, 276);
             label17.Margin = new Padding(2, 0, 2, 0);
             label17.Name = "label17";
             label17.Size = new Size(68, 23);
@@ -1779,14 +1780,14 @@
             dgvChiTietPhieu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvChiTietPhieu.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvChiTietPhieu.BackgroundColor = Color.White;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvChiTietPhieu.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgvChiTietPhieu.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dgvChiTietPhieu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvChiTietPhieu.Columns.AddRange(new DataGridViewColumn[] { MaSPCT, TenSPCT, SoLuongNhapCT, GiaNhapCT });
             dgvChiTietPhieu.Location = new Point(18, 458);
@@ -1891,14 +1892,14 @@
             dgvPhieuNhap.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvPhieuNhap.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvPhieuNhap.BackgroundColor = Color.White;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvPhieuNhap.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dgvPhieuNhap.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dgvPhieuNhap.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPhieuNhap.Location = new Point(18, 238);
             dgvPhieuNhap.Margin = new Padding(3, 4, 3, 4);
@@ -2286,16 +2287,16 @@
             // chartTheoNgay
             // 
             chartTheoNgay.BackColor = Color.WhiteSmoke;
-            chartArea1.Name = "ChartArea1";
-            chartTheoNgay.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            chartTheoNgay.Legends.Add(legend1);
+            chartArea7.Name = "ChartArea1";
+            chartTheoNgay.ChartAreas.Add(chartArea7);
+            legend7.Name = "Legend1";
+            chartTheoNgay.Legends.Add(legend7);
             chartTheoNgay.Location = new Point(442, 3);
             chartTheoNgay.Name = "chartTheoNgay";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            chartTheoNgay.Series.Add(series1);
+            series7.ChartArea = "ChartArea1";
+            series7.Legend = "Legend1";
+            series7.Name = "Series1";
+            chartTheoNgay.Series.Add(series7);
             chartTheoNgay.Size = new Size(437, 202);
             chartTheoNgay.TabIndex = 1;
             chartTheoNgay.Text = "chart2";
@@ -2303,16 +2304,16 @@
             // chartTheoThang
             // 
             chartTheoThang.BackColor = Color.WhiteSmoke;
-            chartArea2.Name = "ChartArea1";
-            chartTheoThang.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            chartTheoThang.Legends.Add(legend2);
+            chartArea8.Name = "ChartArea1";
+            chartTheoThang.ChartAreas.Add(chartArea8);
+            legend8.Name = "Legend1";
+            chartTheoThang.Legends.Add(legend8);
             chartTheoThang.Location = new Point(3, 3);
             chartTheoThang.Name = "chartTheoThang";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            chartTheoThang.Series.Add(series2);
+            series8.ChartArea = "ChartArea1";
+            series8.Legend = "Legend1";
+            series8.Name = "Series1";
+            chartTheoThang.Series.Add(series8);
             chartTheoThang.Size = new Size(433, 202);
             chartTheoThang.TabIndex = 0;
             chartTheoThang.Text = "chart1";
@@ -2320,16 +2321,16 @@
             // chartHinhThuc
             // 
             chartHinhThuc.BackColor = Color.WhiteSmoke;
-            chartArea3.Name = "ChartArea1";
-            chartHinhThuc.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            chartHinhThuc.Legends.Add(legend3);
+            chartArea9.Name = "ChartArea1";
+            chartHinhThuc.ChartAreas.Add(chartArea9);
+            legend9.Name = "Legend1";
+            chartHinhThuc.Legends.Add(legend9);
             chartHinhThuc.Location = new Point(442, 211);
             chartHinhThuc.Name = "chartHinhThuc";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            chartHinhThuc.Series.Add(series3);
+            series9.ChartArea = "ChartArea1";
+            series9.Legend = "Legend1";
+            series9.Name = "Series1";
+            chartHinhThuc.Series.Add(series9);
             chartHinhThuc.Size = new Size(433, 183);
             chartHinhThuc.TabIndex = 2;
             chartHinhThuc.Text = "chart3";
@@ -2349,9 +2350,9 @@
             panelThongke.Controls.Add(panel5);
             panelThongke.Controls.Add(panel4);
             panelThongke.Controls.Add(tableLayoutPanel1);
-            panelThongke.Location = new Point(246, 43);
+            panelThongke.Location = new Point(246, 44);
             panelThongke.Name = "panelThongke";
-            panelThongke.Size = new Size(885, 737);
+            panelThongke.Size = new Size(885, 736);
             panelThongke.TabIndex = 9;
             panelThongke.Visible = false;
             // 

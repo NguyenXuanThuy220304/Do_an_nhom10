@@ -1878,6 +1878,9 @@ namespace Do_an_P10
 
         }
 
-        
+        private void txtE_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
