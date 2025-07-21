@@ -29,17 +29,23 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QL_EcoStraws));
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             menu = new Panel();
             linkThoat = new LinkLabel();
             button3 = new Button();
@@ -214,6 +220,9 @@
             chartTheoThang = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chartHinhThuc = new System.Windows.Forms.DataVisualization.Charting.Chart();
             flowTopSP = new FlowLayoutPanel();
+            chartDonHang = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            chartSP = new System.Windows.Forms.DataVisualization.Charting.Chart();
             panelThongke = new Panel();
             groupBox7 = new GroupBox();
             label27 = new Label();
@@ -265,6 +274,9 @@
             ((System.ComponentModel.ISupportInitialize)chartTheoNgay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartTheoThang).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartHinhThuc).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chartDonHang).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chartSP).BeginInit();
             panelThongke.SuspendLayout();
             groupBox7.SuspendLayout();
             panel5.SuspendLayout();
@@ -1780,14 +1792,14 @@
             dgvChiTietPhieu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvChiTietPhieu.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvChiTietPhieu.BackgroundColor = Color.White;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dgvChiTietPhieu.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvChiTietPhieu.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvChiTietPhieu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvChiTietPhieu.Columns.AddRange(new DataGridViewColumn[] { MaSPCT, TenSPCT, SoLuongNhapCT, GiaNhapCT });
             dgvChiTietPhieu.Location = new Point(18, 458);
@@ -1892,14 +1904,14 @@
             dgvPhieuNhap.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvPhieuNhap.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvPhieuNhap.BackgroundColor = Color.White;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvPhieuNhap.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvPhieuNhap.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvPhieuNhap.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPhieuNhap.Location = new Point(18, 238);
             dgvPhieuNhap.Margin = new Padding(3, 4, 3, 4);
@@ -2275,72 +2287,117 @@
             tableLayoutPanel1.Controls.Add(chartTheoNgay, 1, 0);
             tableLayoutPanel1.Controls.Add(chartTheoThang, 0, 0);
             tableLayoutPanel1.Controls.Add(chartHinhThuc, 1, 1);
-            tableLayoutPanel1.Controls.Add(flowTopSP, 0, 1);
-            tableLayoutPanel1.Location = new Point(0, 320);
+            tableLayoutPanel1.Controls.Add(flowTopSP, 0, 2);
+            tableLayoutPanel1.Controls.Add(chartDonHang, 0, 1);
+            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 1, 2);
+            tableLayoutPanel1.Location = new Point(0, 253);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(882, 417);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 157F));
+            tableLayoutPanel1.Size = new Size(882, 483);
             tableLayoutPanel1.TabIndex = 8;
             // 
             // chartTheoNgay
             // 
             chartTheoNgay.BackColor = Color.WhiteSmoke;
-            chartArea7.Name = "ChartArea1";
-            chartTheoNgay.ChartAreas.Add(chartArea7);
-            legend7.Name = "Legend1";
-            chartTheoNgay.Legends.Add(legend7);
+            chartArea1.Name = "ChartArea1";
+            chartTheoNgay.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            chartTheoNgay.Legends.Add(legend1);
             chartTheoNgay.Location = new Point(442, 3);
             chartTheoNgay.Name = "chartTheoNgay";
-            series7.ChartArea = "ChartArea1";
-            series7.Legend = "Legend1";
-            series7.Name = "Series1";
-            chartTheoNgay.Series.Add(series7);
-            chartTheoNgay.Size = new Size(437, 202);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            chartTheoNgay.Series.Add(series1);
+            chartTheoNgay.Size = new Size(437, 157);
             chartTheoNgay.TabIndex = 1;
             chartTheoNgay.Text = "chart2";
             // 
             // chartTheoThang
             // 
             chartTheoThang.BackColor = Color.WhiteSmoke;
-            chartArea8.Name = "ChartArea1";
-            chartTheoThang.ChartAreas.Add(chartArea8);
-            legend8.Name = "Legend1";
-            chartTheoThang.Legends.Add(legend8);
+            chartArea2.Name = "ChartArea1";
+            chartTheoThang.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            chartTheoThang.Legends.Add(legend2);
             chartTheoThang.Location = new Point(3, 3);
             chartTheoThang.Name = "chartTheoThang";
-            series8.ChartArea = "ChartArea1";
-            series8.Legend = "Legend1";
-            series8.Name = "Series1";
-            chartTheoThang.Series.Add(series8);
-            chartTheoThang.Size = new Size(433, 202);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            chartTheoThang.Series.Add(series2);
+            chartTheoThang.Size = new Size(433, 157);
             chartTheoThang.TabIndex = 0;
             chartTheoThang.Text = "chart1";
             // 
             // chartHinhThuc
             // 
             chartHinhThuc.BackColor = Color.WhiteSmoke;
-            chartArea9.Name = "ChartArea1";
-            chartHinhThuc.ChartAreas.Add(chartArea9);
-            legend9.Name = "Legend1";
-            chartHinhThuc.Legends.Add(legend9);
-            chartHinhThuc.Location = new Point(442, 211);
+            chartArea3.Name = "ChartArea1";
+            chartHinhThuc.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            chartHinhThuc.Legends.Add(legend3);
+            chartHinhThuc.Location = new Point(442, 166);
             chartHinhThuc.Name = "chartHinhThuc";
-            series9.ChartArea = "ChartArea1";
-            series9.Legend = "Legend1";
-            series9.Name = "Series1";
-            chartHinhThuc.Series.Add(series9);
-            chartHinhThuc.Size = new Size(433, 183);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            chartHinhThuc.Series.Add(series3);
+            chartHinhThuc.Size = new Size(433, 157);
             chartHinhThuc.TabIndex = 2;
             chartHinhThuc.Text = "chart3";
             // 
             // flowTopSP
             // 
-            flowTopSP.Location = new Point(3, 211);
+            flowTopSP.Location = new Point(3, 329);
             flowTopSP.Name = "flowTopSP";
-            flowTopSP.Size = new Size(433, 203);
+            flowTopSP.Size = new Size(433, 151);
             flowTopSP.TabIndex = 4;
+            // 
+            // chartDonHang
+            // 
+            chartDonHang.BackColor = Color.WhiteSmoke;
+            chartArea4.Name = "ChartArea1";
+            chartDonHang.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            chartDonHang.Legends.Add(legend4);
+            chartDonHang.Location = new Point(3, 166);
+            chartDonHang.Name = "chartDonHang";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            chartDonHang.Series.Add(series4);
+            chartDonHang.Size = new Size(433, 157);
+            chartDonHang.TabIndex = 2;
+            chartDonHang.Text = "chart3";
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(chartSP);
+            flowLayoutPanel1.Location = new Point(442, 329);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(433, 151);
+            flowLayoutPanel1.TabIndex = 4;
+            // 
+            // chartSP
+            // 
+            chartSP.BackColor = Color.WhiteSmoke;
+            chartArea5.Name = "ChartArea1";
+            chartSP.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            chartSP.Legends.Add(legend5);
+            chartSP.Location = new Point(3, 3);
+            chartSP.Name = "chartSP";
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            chartSP.Series.Add(series5);
+            chartSP.Size = new Size(433, 148);
+            chartSP.TabIndex = 14;
+            chartSP.Text = "chart3";
             // 
             // panelThongke
             // 
@@ -2365,9 +2422,9 @@
             groupBox7.Controls.Add(btnxuatex);
             groupBox7.Controls.Add(btnThongKe);
             groupBox7.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox7.Location = new Point(4, 78);
+            groupBox7.Location = new Point(4, 60);
             groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(873, 155);
+            groupBox7.Size = new Size(873, 116);
             groupBox7.TabIndex = 13;
             groupBox7.TabStop = false;
             groupBox7.Text = "Danh mục";
@@ -2375,7 +2432,7 @@
             // label27
             // 
             label27.AutoSize = true;
-            label27.Location = new Point(25, 91);
+            label27.Location = new Point(403, 37);
             label27.Name = "label27";
             label27.Size = new Size(82, 20);
             label27.TabIndex = 11;
@@ -2402,7 +2459,7 @@
             // dtpDenNgay
             // 
             dtpDenNgay.Font = new Font("Times New Roman", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dtpDenNgay.Location = new Point(117, 88);
+            dtpDenNgay.Location = new Point(495, 34);
             dtpDenNgay.Name = "dtpDenNgay";
             dtpDenNgay.Size = new Size(250, 27);
             dtpDenNgay.TabIndex = 9;
@@ -2411,7 +2468,7 @@
             // btnxuatex
             // 
             btnxuatex.Font = new Font("Times New Roman", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnxuatex.Location = new Point(636, 120);
+            btnxuatex.Location = new Point(770, 74);
             btnxuatex.Name = "btnxuatex";
             btnxuatex.Size = new Size(94, 29);
             btnxuatex.TabIndex = 10;
@@ -2422,7 +2479,7 @@
             // btnThongKe
             // 
             btnThongKe.Font = new Font("Times New Roman", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnThongKe.Location = new Point(536, 120);
+            btnThongKe.Location = new Point(670, 74);
             btnThongKe.Name = "btnThongKe";
             btnThongKe.Size = new Size(94, 29);
             btnThongKe.TabIndex = 10;
@@ -2445,7 +2502,7 @@
             panel5.BackColor = Color.LightGreen;
             panel5.BorderStyle = BorderStyle.FixedSingle;
             panel5.Controls.Add(lblTongLoiNhuan);
-            panel5.Location = new Point(542, 238);
+            panel5.Location = new Point(542, 178);
             panel5.Margin = new Padding(10);
             panel5.Name = "panel5";
             panel5.Padding = new Padding(10);
@@ -2468,7 +2525,7 @@
             panel4.BorderStyle = BorderStyle.FixedSingle;
             panel4.Controls.Add(lblTongDoanhThu);
             panel4.ImeMode = ImeMode.NoControl;
-            panel4.Location = new Point(98, 241);
+            panel4.Location = new Point(98, 181);
             panel4.Margin = new Padding(10);
             panel4.Name = "panel4";
             panel4.Padding = new Padding(10);
@@ -2557,6 +2614,9 @@
             ((System.ComponentModel.ISupportInitialize)chartTheoNgay).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartTheoThang).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartHinhThuc).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chartDonHang).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)chartSP).EndInit();
             panelThongke.ResumeLayout(false);
             panelThongke.PerformLayout();
             groupBox7.ResumeLayout(false);
@@ -2758,5 +2818,8 @@
         private Label label26;
         private Label label28;
         private Button btnxuatex;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartDonHang;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartSP;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }

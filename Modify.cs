@@ -579,5 +579,96 @@ ORDER BY Thang";
                 return result != DBNull.Value ? Convert.ToDecimal(result) : 0;
             }
         }
+        public static DataTable LayLichSuMuaHangChiTietTheoTenTaiKhoan(string tenTK)
+        {
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                string sql = @"
+SELECT 
+    dh.MaDH, dh.NgayLap, dh.TongTien, dh.TrangThai,
+    ct.MaSP, ct.Tensanpham, ct.SoLuong, ct.DonGia
+FROM DonHang dh
+JOIN CT_DonHang ct ON dh.MaDH = ct.MaDH
+JOIN khachhang kh ON dh.MaKH = kh.MaKH
+WHERE kh.Tentaikhoan = @tenTK
+ORDER BY dh.NgayLap DESC, dh.MaDH DESC";
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@tenTK", tenTK);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+        public DataTable LayBaoCaoDoanhThuTheoDonHang(DateTime tuNgay, DateTime denNgay)
+        {
+            string sql = @"
+        SELECT MaDH, NgayLap, TongTien
+        FROM DonHang
+        WHERE NgayLap BETWEEN @tuNgay AND @denNgay
+        ORDER BY NgayLap DESC";
+
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@tuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@denNgay", denNgay);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+        public DataTable LayBaoCaoSanPham(DateTime tuNgay, DateTime denNgay)
+        {
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                string sql = @"WITH GiaNhapGanNhat AS (
+    SELECT 
+        ct.MaDH,
+        ct.MaSP,
+        ct.Tensanpham,
+        ct.SoLuong,
+        ct.DonGia,
+        dh.NgayLap AS NgayBan,
+        pn.NgayNhap,
+        ctpn.DonGiaNhap,
+        ROW_NUMBER() OVER (
+            PARTITION BY ct.MaDH, ct.MaSP 
+            ORDER BY pn.NgayNhap DESC
+        ) AS rn
+    FROM CT_DonHang ct
+    JOIN DonHang dh ON ct.MaDH = dh.MaDH
+    JOIN CT_PhieuNhap ctpn ON ct.MaSP = ctpn.MaSP
+    JOIN PhieuNhap pn ON ctpn.MaPhieuNhap = pn.MaPhieuNhap
+    WHERE pn.NgayNhap <= dh.NgayLap
+      AND dh.NgayLap BETWEEN @tuNgay AND @denNgay
+)
+SELECT
+    g.Tensanpham,
+    SUM(g.SoLuong) AS TongSoLuong,
+    SUM(g.SoLuong * g.DonGia) AS TongDoanhThu,
+    SUM(g.SoLuong * g.DonGiaNhap) AS TongTienVon,
+    SUM(g.SoLuong * (g.DonGia - g.DonGiaNhap)) AS LoiNhuan
+FROM GiaNhapGanNhat g
+WHERE g.rn = 1  -- chỉ lấy giá nhập gần nhất
+GROUP BY g.Tensanpham
+ORDER BY TongDoanhThu DESC;
+";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@tuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@denNgay", denNgay);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+
+
+
     }
 }

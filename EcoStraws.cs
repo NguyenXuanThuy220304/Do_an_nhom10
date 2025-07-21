@@ -31,6 +31,7 @@ namespace Do_an_P10
         List<sanpham> allProducts = new List<sanpham>();
         private void EcoStraws_Load(object sender, EventArgs e)
         {
+            dgvlichsu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             // Danh sách sản phẩm để load
             List<(int MaSP, Image hinh)> dsSp = new List<(int, Image)>
     {
@@ -138,7 +139,36 @@ namespace Do_an_P10
             DisplayProducts(filtered);
         }
 
-     
+        private void btnLichsumua_Click(object sender, EventArgs e)
+        {
+            panLichSuMua.Visible = !panLichSuMua.Visible;
+
+        }
+
+        private void panLichSuMua_Paint(object sender, PaintEventArgs e)
+        {
+            DataTable dt = Modify.LayLichSuMuaHangChiTietTheoTenTaiKhoan(tentk);
+
+            // Xử lý xoá MaDH, NgayLap... ở dòng lặp lại
+            int? lastMaDH = null;
+            foreach (DataRow row in dt.Rows)
+            {
+                int currentMaDH = Convert.ToInt32(row["MaDH"]);
+                if (lastMaDH != null && currentMaDH == lastMaDH)
+                {
+                    row["MaDH"] = DBNull.Value;
+                    row["NgayLap"] = DBNull.Value;
+                    row["TongTien"] = DBNull.Value;
+                    row["TrangThai"] = DBNull.Value;
+                }
+                else
+                {
+                    lastMaDH = currentMaDH;
+                }
+            }
+
+            dgvlichsu.DataSource = dt;
+        }
     }
 }
 

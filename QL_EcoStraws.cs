@@ -1565,6 +1565,88 @@ namespace Do_an_P10
                 chartTheoThang.Series["Lợi nhuận"].Points.AddXY(thang, loiNhuan);
             }
         }
+        private void LoadDoanhThuTheoDonHang()
+        {
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
+
+            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
+
+            chartDonHang.Series.Clear();
+            chartDonHang.Titles.Clear();
+
+            chartDonHang.Titles.Add("Doanh thu theo đơn hàng");
+            chartDonHang.Titles[0].Font = new Font("Times New Roman", 10, FontStyle.Bold);
+
+            Series series = new Series("Doanh thu đơn")
+            {
+                ChartType = SeriesChartType.Column,
+                Color = Color.Teal,
+                BorderWidth = 2
+            };
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string maDH = row["MaDH"].ToString();
+                decimal tongTien = Convert.ToDecimal(row["TongTien"]);
+                series.Points.AddXY(maDH, tongTien);
+            }
+
+            chartDonHang.Series.Add(series);
+
+            var chartArea = chartDonHang.ChartAreas[0];
+            chartArea.AxisX.Title = "Mã đơn hàng";
+            chartArea.AxisY.Title = "Doanh thu (VNĐ)";
+            chartArea.AxisX.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.LabelStyle.Format = "#,##0";
+        }
+        private void LoadDoanhThuVaLoiNhuanTheoSanPham()
+        {
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
+
+            DataTable dt = new Modify().LayBaoCaoSanPham(tuNgay, denNgay);
+
+            chartSP.Series.Clear();
+            chartSP.Titles.Clear();
+
+            chartSP.Titles.Add("Doanh thu và lợi nhuận theo sản phẩm");
+            chartSP.Titles[0].Font = new Font("Times New Roman", 10, FontStyle.Bold);
+
+            Series doanhThu = new Series("Doanh thu")
+            {
+                ChartType = SeriesChartType.Column,
+                Color = Color.DodgerBlue
+            };
+
+            Series loiNhuan = new Series("Lợi nhuận")
+            {
+                ChartType = SeriesChartType.Column,
+                Color = Color.Orange
+            };
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string tenSP = row["Tensanpham"].ToString();
+                decimal tongDoanhThu = Convert.ToDecimal(row["TongDoanhThu"]);
+                decimal tongLoiNhuan = Convert.ToDecimal(row["LoiNhuan"]);
+
+                doanhThu.Points.AddXY(tenSP, tongDoanhThu);
+                loiNhuan.Points.AddXY(tenSP, tongLoiNhuan);
+            }
+
+            chartSP.Series.Add(doanhThu);
+            chartSP.Series.Add(loiNhuan);
+
+            var chartArea = chartSP.ChartAreas[0];
+            chartArea.AxisX.Title = "Sản phẩm";
+            chartArea.AxisY.Title = "VNĐ";
+            chartArea.AxisY.LabelStyle.Format = "#,##0";
+            chartArea.AxisX.LabelStyle.Angle = -30; // nghiêng tên SP cho dễ đọc
+            chartArea.AxisX.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+        }
 
 
         private void LoadDoanhThuTheoNgay()
@@ -1704,8 +1786,9 @@ namespace Do_an_P10
             LoadDoanhThuTheoNgay();
             LoadTyLeHinhThucBan();
             LoadTopSanPham();
-            //  LoadTopDanhMuc();
+            LoadDoanhThuTheoDonHang();
             TongThanhTien();
+            LoadDoanhThuVaLoiNhuanTheoSanPham();
         }
         private void TkandBc_Click_1(object sender, EventArgs e)
         {
@@ -1729,7 +1812,6 @@ namespace Do_an_P10
             DataTable dtThang = modify.LayBaoCaoDoanhThuTheoThang(tuNgay, denNgay);
             DataTable dtNgay = modify.LayBaoCaoDoanhThuTheoNgay(tuNgay, denNgay);
             decimal tongNhap = modify.LayTongTienNhap(tuNgay, denNgay);
-
             // Lấy đơn hàng theo thời gian
             string queryDH = @"
         SELECT dh.MaDH, kh.Hoten, dh.NgayLap, dh.TongTien, dh.TrangThai
@@ -1749,7 +1831,29 @@ namespace Do_an_P10
                 da.Fill(dtDonHang);
             }
 
-            // Tổng hợp dữ liệu
+            // Lấy báo cáo sản phẩm
+            DataTable dtSanPham = modify.LayBaoCaoSanPham(tuNgay, denNgay);
+            // Lấy báo cáo khách hàng
+            string queryKH = @"
+    SELECT kh.MaKH, kh.Hoten, kh.SDT, COUNT(dh.MaDH) AS SoDonHang, SUM(dh.TongTien) AS TongTienMua
+    FROM KhachHang kh
+    LEFT JOIN DonHang dh ON kh.MaKH = dh.MaKH
+    WHERE dh.NgayLap BETWEEN @tuNgay AND @denNgay
+    GROUP BY kh.MaKH, kh.Hoten, kh.SDT
+    ORDER BY TongTienMua DESC";
+
+            DataTable dtKhachHang = new DataTable();
+            using (SqlConnection conn = ketnoi.GetSqlConnection())
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(queryKH, conn);
+                cmd.Parameters.AddWithValue("@tuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@denNgay", denNgay);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dtKhachHang);
+            }
+
+            // Tính tổng doanh thu & lợi nhuận từ dtThang
             decimal tongDoanhThu = 0;
             decimal tongLoiNhuan = 0;
             foreach (DataRow row in dtThang.Rows)
@@ -1815,35 +1919,72 @@ namespace Do_an_P10
                 }
                 ws3.Columns().AdjustToContents();
 
-                // Sheet 4: Tổng kết
-                var ws4 = wb.Worksheets.Add("Tổng kết");
-                ws4.Cell("A1").Value = "Tổng doanh thu:";
-                ws4.Cell("B1").Value = tongDoanhThu;
+                // Sheet 4: Báo cáo sản phẩm
+                var ws4 = wb.Worksheets.Add("Báo cáo sản phẩm");
+                ws4.Cell("A1").Value = "Sản phẩm";
+                ws4.Cell("B1").Value = "Số lượng bán";
+                ws4.Cell("C1").Value = "Tổng doanh thu";
+                ws4.Cell("D1").Value = "Tổng tiền vốn";
+                ws4.Cell("E1").Value = "Lợi nhuận";
+                ws4.Range("A1:E1").Style.Font.Bold = true;
 
-                ws4.Cell("A2").Value = "Tổng lợi nhuận (tính từ đơn hàng):";
-                ws4.Cell("B2").Value = tongLoiNhuan;
-
-                ws4.Cell("A3").Value = "Tổng tiền nhập kho:";
-                ws4.Cell("B3").Value = tongNhap;
-
-                ws4.Cell("A4").Value = "Lợi nhuận thực tế:";
-                ws4.Cell("B4").Value = tongDoanhThu - tongNhap;
-
-                ws4.Cell("A5").Value = "Tỷ suất lợi nhuận (%):";
-                ws4.Cell("B5").Value = tySuatLN;
-                ws4.Cell("B5").Style.NumberFormat.Format = "0.##\\%";
-
-                ws4.Range("A1:A5").Style.Font.Bold = true;
+                int r4 = 2;
+                foreach (DataRow dr in dtSanPham.Rows)
+                {
+                    ws4.Cell(r4, 1).Value = dr["Tensanpham"].ToString();
+                    ws4.Cell(r4, 2).Value = Convert.ToInt32(dr["TongSoLuong"]);
+                    ws4.Cell(r4, 3).Value = Convert.ToDecimal(dr["TongDoanhThu"]);
+                    ws4.Cell(r4, 4).Value = Convert.ToDecimal(dr["TongTienVon"]);
+                    ws4.Cell(r4, 5).Value = Convert.ToDecimal(dr["LoiNhuan"]);
+                    r4++;
+                }
+                ws4.Columns(3, 5).Style.NumberFormat.Format = "#,##0 đ";
                 ws4.Columns().AdjustToContents();
-                ws4.Columns(2, 2).Style.NumberFormat.Format = "#,##0 đ";
 
+                // Sheet 5: Tổng kết
+                var ws5 = wb.Worksheets.Add("Tổng kết");
+                ws5.Cell("A1").Value = "Tổng doanh thu:";
+                ws5.Cell("B1").Value = tongDoanhThu;
+                ws5.Cell("A2").Value = "Tổng lợi nhuận (tính từ đơn hàng):";
+                ws5.Cell("B2").Value = tongLoiNhuan;
+                ws5.Cell("A3").Value = "Tổng tiền nhập kho:";
+                ws5.Cell("B3").Value = tongNhap;
+                ws5.Cell("A4").Value = "Lợi nhuận thực tế:";
+                ws5.Cell("B4").Value = tongDoanhThu - tongNhap;
+                ws5.Cell("A5").Value = "Tỷ suất lợi nhuận (%):";
+                ws5.Cell("B5").Value = tySuatLN;
+                ws5.Cell("B5").Style.NumberFormat.Format = "0.##\\%";
+                ws5.Range("A1:A5").Style.Font.Bold = true;
+                ws5.Columns(2, 2).Style.NumberFormat.Format = "#,##0 đ";
+                ws5.Columns().AdjustToContents();
+                // Sheet 6: Khách hàng/Đại lý
+                var ws6 = wb.Worksheets.Add("Khách hàng");
+                ws6.Cell("A1").Value = "Mã KH";
+                ws6.Cell("B1").Value = "Họ tên";
+                ws6.Cell("C1").Value = "SĐT";
+                ws6.Cell("D1").Value = "Số đơn hàng";
+                ws6.Cell("E1").Value = "Tổng tiền mua (VNĐ)";
+                ws6.Range("A1:E1").Style.Font.Bold = true;
+
+                int r6 = 2;
+                foreach (DataRow dr in dtKhachHang.Rows)
+                {
+                    ws6.Cell(r6, 1).Value = Convert.ToInt32(dr["MaKH"]);
+                    ws6.Cell(r6, 2).Value = dr["Hoten"].ToString();
+                    ws6.Cell(r6, 3).Value = dr["SDT"].ToString();
+                    ws6.Cell(r6, 4).Value = Convert.ToInt32(dr["SoDonHang"]);
+                    ws6.Cell(r6, 5).Value = dr["TongTienMua"] != DBNull.Value ? Convert.ToDecimal(dr["TongTienMua"]) : 0;
+                    r6++;
+                }
+                ws6.Columns(5, 5).Style.NumberFormat.Format = "#,##0 đ";
+                ws6.Columns().AdjustToContents();
+             
                 // Xuất file
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {
                     sfd.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
                     sfd.Title = "Lưu báo cáo tổng hợp";
                     sfd.FileName = $"BaoCaoTongHop_{DateTime.Now:yyyyMMdd}.xlsx";
-
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
                         wb.SaveAs(sfd.FileName);
