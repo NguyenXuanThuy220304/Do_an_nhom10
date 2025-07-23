@@ -20,7 +20,7 @@ namespace Do_an_P10
             gia.Text = sp.Dongia.ToString();
             tensp.Text = sp.Tensanpham;
             anh.Image = sp.Hinhanh;
-            int slt = sp.Soluong ;
+            int slt = sp.Soluong;
             slton.Text = $"Số lượng: {slt}";
             // Thêm số lượng từ 1 đến 10 vào ListBox (hoặc ComboBox)
             //      sl.Items.Clear();
@@ -79,6 +79,45 @@ namespace Do_an_P10
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void dathang_Click(object sender, EventArgs e)
+        {
+            int soLuong = int.Parse(sl.SelectedItem.ToString());
+
+            Giohang item = new Giohang
+            {
+                MaSP = Sanpham.MaSP,
+                TenSanPham = Sanpham.Tensanpham,
+                DonGia = Sanpham.Dongia,
+                SoLuong = soLuong
+            };
+
+            GioHangData.Instance.ThemSanPham(item);
+
+            int maKH = Modify.LayMaKhachHang(tentk); // Lấy mã khách từ tài khoản đăng nhập
+            DateTime ngayLap = DateTime.Now;
+            decimal tongTien = GioHangData.Instance.TongTien();
+
+            // Thêm đơn hàng mới và lấy mã đơn hàng vừa tạo
+            int maDonHang = Modify.ThemDonHangVaLayMa(ngayLap, maKH, tongTien);
+
+            // Thêm chi tiết đơn hàng
+
+            foreach (var sp in GioHangData.Instance.DanhSachSanPham)
+            {
+                Modify.ThemChiTietDonHang(maDonHang, sp.MaSP, sp.TenSanPham, sp.SoLuong, sp.DonGia);
+            }
+
+            MessageBox.Show("Đặt hàng thành công!");
+
+            // Xóa giỏ hàng sau khi đặt
+            GioHangData.Instance.XoaTatCa();
+
+            // Mở form hóa đơn và truyền mã đơn hàng và mã khách
+            HoaDon hoaDonForm = new HoaDon(maDonHang, maKH, tentk);
+            hoaDonForm.Show();
+            this.Hide();
         }
     }
 }

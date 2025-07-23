@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tt_muahang));
             tensp = new TextBox();
             gia = new TextBox();
             label3 = new Label();
@@ -40,6 +41,7 @@
             panel1 = new Panel();
             label5 = new Label();
             label4 = new Label();
+            dathang = new Button();
             ((System.ComponentModel.ISupportInitialize)anh).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -48,27 +50,30 @@
             // 
             tensp.BorderStyle = BorderStyle.FixedSingle;
             tensp.Font = new Font("Times New Roman", 11.25F);
-            tensp.Location = new Point(239, 391);
+            tensp.Location = new Point(299, 489);
+            tensp.Margin = new Padding(4);
             tensp.Name = "tensp";
-            tensp.Size = new Size(280, 29);
+            tensp.Size = new Size(350, 33);
             tensp.TabIndex = 5;
             // 
             // gia
             // 
             gia.BorderStyle = BorderStyle.FixedSingle;
             gia.Font = new Font("Times New Roman", 11.25F);
-            gia.Location = new Point(239, 201);
+            gia.Location = new Point(299, 251);
+            gia.Margin = new Padding(4);
             gia.Name = "gia";
-            gia.Size = new Size(280, 29);
+            gia.Size = new Size(350, 33);
             gia.TabIndex = 5;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(240, 359);
+            label3.Location = new Point(300, 449);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(73, 26);
+            label3.Size = new Size(87, 32);
             label3.TabIndex = 3;
             label3.Text = "Mô tả";
             // 
@@ -76,20 +81,22 @@
             // 
             sl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             sl.FormattingEnabled = true;
-            sl.ItemHeight = 23;
+            sl.ItemHeight = 28;
             sl.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" });
-            sl.Location = new Point(240, 299);
+            sl.Location = new Point(300, 374);
+            sl.Margin = new Padding(4);
             sl.Name = "sl";
-            sl.Size = new Size(278, 27);
+            sl.Size = new Size(346, 32);
             sl.TabIndex = 2;
             // 
             // slton
             // 
             slton.AutoSize = true;
             slton.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            slton.Location = new Point(240, 267);
+            slton.Location = new Point(300, 334);
+            slton.Margin = new Padding(4, 0, 4, 0);
             slton.Name = "slton";
-            slton.Size = new Size(102, 26);
+            slton.Size = new Size(123, 32);
             slton.TabIndex = 1;
             slton.Text = "Số lượng";
             // 
@@ -97,9 +104,10 @@
             // 
             anh.BackColor = Color.White;
             anh.BackgroundImageLayout = ImageLayout.Stretch;
-            anh.Location = new Point(42, 176);
+            anh.Location = new Point(52, 220);
+            anh.Margin = new Padding(4);
             anh.Name = "anh";
-            anh.Size = new Size(159, 195);
+            anh.Size = new Size(199, 244);
             anh.SizeMode = PictureBoxSizeMode.StretchImage;
             anh.TabIndex = 0;
             anh.TabStop = false;
@@ -108,18 +116,20 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(239, 173);
+            label1.Location = new Point(299, 216);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(92, 26);
+            label1.Size = new Size(111, 32);
             label1.TabIndex = 1;
             label1.Text = "Đơn giá";
             // 
             // ql
             // 
             ql.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            ql.Location = new Point(82, 477);
+            ql.Location = new Point(66, 614);
+            ql.Margin = new Padding(4);
             ql.Name = "ql";
-            ql.Size = new Size(119, 56);
+            ql.Size = new Size(153, 67);
             ql.TabIndex = 4;
             ql.Text = "Quay lại";
             ql.UseVisualStyleBackColor = true;
@@ -128,11 +138,12 @@
             // dh
             // 
             dh.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dh.Location = new Point(386, 477);
+            dh.Location = new Point(283, 614);
+            dh.Margin = new Padding(4);
             dh.Name = "dh";
-            dh.Size = new Size(119, 56);
+            dh.Size = new Size(153, 67);
             dh.TabIndex = 6;
-            dh.Text = "Đặt hàng";
+            dh.Text = "Thêm vào \r\ngiỏ hàng";
             dh.UseVisualStyleBackColor = true;
             dh.Click += dh_Click_1;
             // 
@@ -142,6 +153,7 @@
             panel1.Controls.Add(label5);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(anh);
+            panel1.Controls.Add(dathang);
             panel1.Controls.Add(dh);
             panel1.Controls.Add(tensp);
             panel1.Controls.Add(ql);
@@ -151,10 +163,10 @@
             panel1.Controls.Add(gia);
             panel1.Controls.Add(slton);
             panel1.Font = new Font("Microsoft Sans Serif", 8.25F);
-            panel1.Location = new Point(281, 96);
-            panel1.Margin = new Padding(3, 4, 3, 4);
+            panel1.Location = new Point(351, 120);
+            panel1.Margin = new Padding(4, 5, 4, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(571, 600);
+            panel1.Size = new Size(714, 750);
             panel1.TabIndex = 7;
             panel1.Paint += panel1_Paint;
             // 
@@ -163,9 +175,10 @@
             label5.AutoSize = true;
             label5.BackColor = SystemColors.Control;
             label5.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(191, 100);
+            label5.Location = new Point(239, 125);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(211, 35);
+            label5.Size = new Size(252, 41);
             label5.TabIndex = 8;
             label5.Text = "Phiếu Đặt hàng";
             // 
@@ -174,21 +187,35 @@
             label4.AutoSize = true;
             label4.Font = new Font("Times New Roman", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label4.ForeColor = Color.Black;
-            label4.Location = new Point(163, 32);
+            label4.Location = new Point(204, 40);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(277, 42);
+            label4.Size = new Size(330, 51);
             label4.TabIndex = 7;
             label4.Text = "EcoStraws HKT";
             // 
+            // dathang
+            // 
+            dathang.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dathang.Location = new Point(500, 614);
+            dathang.Margin = new Padding(4);
+            dathang.Name = "dathang";
+            dathang.Size = new Size(153, 67);
+            dathang.TabIndex = 6;
+            dathang.Text = "Đặt hàng";
+            dathang.UseVisualStyleBackColor = true;
+            dathang.Click += dathang_Click;
+            // 
             // tt_muahang
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Honeydew;
-            BackgroundImage = Properties.Resources.phan_huy_03_thang;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1095, 787);
+            ClientSize = new Size(1369, 984);
             Controls.Add(panel1);
+            Margin = new Padding(4);
             Name = "tt_muahang";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "tt_muahang";
@@ -211,5 +238,6 @@
         private Panel panel1;
         private Label label4;
         private Label label5;
+        private Button dathang;
     }
 }

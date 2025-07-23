@@ -1565,88 +1565,6 @@ namespace Do_an_P10
                 chartTheoThang.Series["Lợi nhuận"].Points.AddXY(thang, loiNhuan);
             }
         }
-        private void LoadDoanhThuTheoDonHang()
-        {
-            DateTime tuNgay = dtpTuNgay.Value.Date;
-            DateTime denNgay = dtpDenNgay.Value.Date;
-
-            DataTable dt = new Modify().LayBaoCaoDoanhThuTheoDonHang(tuNgay, denNgay);
-
-            chartDonHang.Series.Clear();
-            chartDonHang.Titles.Clear();
-
-            chartDonHang.Titles.Add("Doanh thu theo đơn hàng");
-            chartDonHang.Titles[0].Font = new Font("Times New Roman", 10, FontStyle.Bold);
-
-            Series series = new Series("Doanh thu đơn")
-            {
-                ChartType = SeriesChartType.Column,
-                Color = Color.Teal,
-                BorderWidth = 2
-            };
-
-            foreach (DataRow row in dt.Rows)
-            {
-                string maDH = row["MaDH"].ToString();
-                decimal tongTien = Convert.ToDecimal(row["TongTien"]);
-                series.Points.AddXY(maDH, tongTien);
-            }
-
-            chartDonHang.Series.Add(series);
-
-            var chartArea = chartDonHang.ChartAreas[0];
-            chartArea.AxisX.Title = "Mã đơn hàng";
-            chartArea.AxisY.Title = "Doanh thu (VNĐ)";
-            chartArea.AxisX.MajorGrid.LineColor = Color.LightGray;
-            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
-            chartArea.AxisY.LabelStyle.Format = "#,##0";
-        }
-        private void LoadDoanhThuVaLoiNhuanTheoSanPham()
-        {
-            DateTime tuNgay = dtpTuNgay.Value.Date;
-            DateTime denNgay = dtpDenNgay.Value.Date;
-
-            DataTable dt = new Modify().LayBaoCaoSanPham(tuNgay, denNgay);
-
-            chartSP.Series.Clear();
-            chartSP.Titles.Clear();
-
-            chartSP.Titles.Add("Doanh thu và lợi nhuận theo sản phẩm");
-            chartSP.Titles[0].Font = new Font("Times New Roman", 10, FontStyle.Bold);
-
-            Series doanhThu = new Series("Doanh thu")
-            {
-                ChartType = SeriesChartType.Column,
-                Color = Color.DodgerBlue
-            };
-
-            Series loiNhuan = new Series("Lợi nhuận")
-            {
-                ChartType = SeriesChartType.Column,
-                Color = Color.Orange
-            };
-
-            foreach (DataRow row in dt.Rows)
-            {
-                string tenSP = row["Tensanpham"].ToString();
-                decimal tongDoanhThu = Convert.ToDecimal(row["TongDoanhThu"]);
-                decimal tongLoiNhuan = Convert.ToDecimal(row["LoiNhuan"]);
-
-                doanhThu.Points.AddXY(tenSP, tongDoanhThu);
-                loiNhuan.Points.AddXY(tenSP, tongLoiNhuan);
-            }
-
-            chartSP.Series.Add(doanhThu);
-            chartSP.Series.Add(loiNhuan);
-
-            var chartArea = chartSP.ChartAreas[0];
-            chartArea.AxisX.Title = "Sản phẩm";
-            chartArea.AxisY.Title = "VNĐ";
-            chartArea.AxisY.LabelStyle.Format = "#,##0";
-            chartArea.AxisX.LabelStyle.Angle = -30; // nghiêng tên SP cho dễ đọc
-            chartArea.AxisX.MajorGrid.LineColor = Color.LightGray;
-            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
-        }
 
 
         private void LoadDoanhThuTheoNgay()
@@ -1786,9 +1704,8 @@ namespace Do_an_P10
             LoadDoanhThuTheoNgay();
             LoadTyLeHinhThucBan();
             LoadTopSanPham();
-            LoadDoanhThuTheoDonHang();
             TongThanhTien();
-            LoadDoanhThuVaLoiNhuanTheoSanPham();
+         
         }
         private void TkandBc_Click_1(object sender, EventArgs e)
         {
@@ -1978,7 +1895,7 @@ namespace Do_an_P10
                 }
                 ws6.Columns(5, 5).Style.NumberFormat.Format = "#,##0 đ";
                 ws6.Columns().AdjustToContents();
-             
+
                 // Xuất file
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {
@@ -2020,6 +1937,21 @@ namespace Do_an_P10
         }
 
         private void txtE_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void chartSP_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelThongke_Paint(object sender, PaintEventArgs e)
         {
 
         }
