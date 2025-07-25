@@ -72,6 +72,9 @@ namespace Do_an_P10
         {
             ttk.Text = tentk; // nếu có label để hiển thị
             ttk.ReadOnly = true;
+            List<taikhoan> emails = modify.tk($"SELECT * FROM taikhoan WHERE tentaikhoan = '{tentk}'");
+            string Email = emails[0].Email;
+            mail.Text = Email;
         }
 
         private void btnQL_Click(object sender, EventArgs e)

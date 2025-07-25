@@ -24,7 +24,7 @@ namespace Do_an_P10
         {
             if (string.IsNullOrWhiteSpace(e)) return false;
             e = e.Trim(); // Xóa khoảng trắng đầu/cuối nếu có
-            return Regex.IsMatch(e, @"^[a-zA-Z0-9_.@#]{3,50}@gmail\.com(\.vn)?$");
+            return Regex.IsMatch(e, @"^[a-zA-Z0-9_.#]{3,50}@gmail\.com(\.vn)?$");
         }
 
         Modify modify = new Modify();
@@ -34,7 +34,7 @@ namespace Do_an_P10
             String matk = mk.Text;
             String xacnhanmk = nlmk.Text;
             String Email = em.Text;
-            if (!checkacc(matk)) { MessageBox.Show("Vui lòng nhập mật khẩu dài từ 5 - 24 ký tự bao gồm ký tự, chữ thường, chữ hoa, số "); return; }
+            if (!checkacc(matk)) { MessageBox.Show("Vui lòng nhập mật khẩu dài từ 5 - 24 ký tự (chữ thường, chữ hoa, số) "); return; }
             if (xacnhanmk != matk) { MessageBox.Show("Vui lòng kiểm tra lại mật khẩu!"); return; }
             if (!checkemail(Email))
             {

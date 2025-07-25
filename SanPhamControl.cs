@@ -46,5 +46,10 @@ namespace Do_an_P10
                 parentForm.Hide();
             }
         }
+
+        private void lblTenSP_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

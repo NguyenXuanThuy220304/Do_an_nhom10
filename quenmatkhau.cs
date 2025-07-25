@@ -31,7 +31,7 @@ namespace Do_an_P10
                 String query = "Select * from taikhoan where email = '" + Email + "'";
                 if (modify.tk(query).Count != 0)
                 {
-                    MessageBox.Show("Nật khẩu của bạn: " + modify.tk(query)[0].Matkhau, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Mật khẩu của bạn: " + modify.tk(query)[0].Matkhau, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Dangnhap dn = new Dangnhap();
                     dn.Show();
                     this.Hide();
